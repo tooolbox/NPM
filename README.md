@@ -1,4 +1,6 @@
-# FirstApiSDK
+# FirstVision Go SDK
+
+[![Godoc](https://godoc.org/github.com/tooolbox/firstvision?status.svg)](https://godoc.org/github.com/tooolbox/firstvision/client)
 
 FirstVision RESTful Web Services
 
