@@ -8,4 +8,5 @@ require (
 	github.com/go-openapi/strfmt v0.19.5
 	github.com/go-openapi/swag v0.19.9
 	github.com/go-openapi/validate v0.19.11
+	github.com/gofrs/uuid v3.3.0+incompatible
 )
