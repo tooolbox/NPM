@@ -9,4 +9,4 @@ rm -rf ../models
 
 echo Command to generate SDK
 
-swagger generate client -A FirstVision -f swagger_20200820_508_0.yml -t ../
+swagger generate client -A Fiserv -f ExternalYAML-6.14-v2-10-15-2020.yaml -t ../
