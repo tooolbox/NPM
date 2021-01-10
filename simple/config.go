@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/go-openapi/runtime"
-	httptransport "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/strfmt"
-	"github.com/tooolbox/firstvision/client"
+	"github.com/tooolbox/fiserv"
 )
 
 const (
-	ProdHost    = "prod.api.firstdata.com"
-	SandboxHost = "cert.api.firstdata.com"
+	ProdHost    = "prod.api.firstdata.com/gateway/v2"
+	SandboxHost = "cert.api.firstdata.com/gateway/v2"
 
 	ProdEnvironment    = "production"
 	SandboxEnvironment = "sandbox"
@@ -25,60 +22,53 @@ type Config struct {
 }
 
 type Gateway struct {
-	cfg          Config
-	debugLogging bool
+	cfg Config
+	fiserv.ClientInterface
 }
 
-func NewGateway(cfg Config) *Gateway {
-	return &Gateway{
-		cfg: cfg,
-	}
-}
+func NewGateway(cfg Config, opts ...fiserv.ClientOption) (*Gateway, error) {
 
-func (gw *Gateway) WithDebugLogging(debug bool) *Gateway {
-	gw.debugLogging = debug
-	return gw
-}
-
-func (gw *Gateway) Transport() (*httptransport.Runtime, error) {
-
-	var host string
-	switch strings.ToLower(gw.cfg.Environment) {
+	var endpoint string
+	switch strings.ToLower(cfg.Environment) {
 	case ProdEnvironment:
-		host = ProdHost
+		endpoint = ProdHost
 	case SandboxEnvironment:
-		host = SandboxHost
+		endpoint = SandboxHost
 	default:
-		return nil, fmt.Errorf("unknown run environment '%s', please use one of: [%s, %s]", gw.cfg.Environment, ProdEnvironment, SandboxEnvironment)
+		return nil, fmt.Errorf("unknown run environment '%s', please use one of: [%s, %s]", cfg.Environment, ProdEnvironment, SandboxEnvironment)
 	}
 
-	tr := httptransport.New(
-		host,
-		client.DefaultBasePath,
-		client.DefaultSchemes,
-	)
+	opts = append(opts)
 
-	tr.SetDebug(gw.debugLogging)
-
-	auth, err := gw.ClientAuthInfoWriter(host)
+	clnt, err := fiserv.NewClient("https://"+endpoint, opts...)
 	if err != nil {
 		return nil, err
 	}
 
-	tr.DefaultAuthentication = auth
-
-	return tr, nil
+	return &Gateway{
+		cfg:             cfg,
+		ClientInterface: clnt,
+	}, nil
 }
 
-func (gw *Gateway) ClientAuthInfoWriter(host string) (runtime.ClientAuthInfoWriter, error) {
-	return gw.SignatureAuth(host), nil
-}
+// func (gw *Gateway) Auth(ctx context.Context, req *http.Request) error
 
-func (gw *Gateway) NewHTTPClient(formats strfmt.Registry) (*client.FirstVision, error) {
-	tr, err := gw.Transport()
-	if err != nil {
-		return nil, err
-	}
+// auth, err := gw.ClientAuthInfoWriter(host)
+// if err != nil {
+// 	return nil, err
+// }
 
-	return client.New(tr, formats), nil
-}
+// tr.DefaultAuthentication = auth
+
+// func (gw *Gateway) ClientAuthInfoWriter(host string) (runtime.ClientAuthInfoWriter, error) {
+// 	return gw.SignatureAuth(host), nil
+// }
+
+// func (gw *Gateway) NewHTTPClient(formats strfmt.Registry) (*client.FirstVision, error) {
+// 	tr, err := gw.Transport()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return client.New(tr, formats), nil
+// }
