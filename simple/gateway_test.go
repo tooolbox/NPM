@@ -11,6 +11,9 @@ import (
 )
 
 func TestGateway(t *testing.T) {
+
+	// Credentials are from https://docs.firstdata.com/org/gateway/docs/api
+	// and they may be subject to change.
 	cfg := Config{
 		ApiKey:      "csn5gVMfGgXh1cnFtimlHQOH1zNERw7Q",
 		ApiSecret:   "9JiLZgNhQPTA1KIt",
