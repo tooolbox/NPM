@@ -43,12 +43,7 @@ func generateSignature(apiSecret string, data []byte) (string, error) {
 	// h = hmac.new(self.api_secret, data, hashlib.sha256).hexdigest()
 	// return base64.b64encode(h)
 
-	decodedKey, err := base64.StdEncoding.DecodeString(apiSecret)
-	if err != nil {
-		return "", fmt.Errorf("failed to decode the secret key: %v", err)
-	}
-
-	hasher := hmac.New(sha256.New, decodedKey)
+	hasher := hmac.New(sha256.New, []byte(apiSecret))
 	if _, err := hasher.Write(data); err != nil {
 		return "", fmt.Errorf("unable to hash data: %v", err)
 	}
