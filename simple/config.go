@@ -50,25 +50,3 @@ func NewGateway(cfg Config, opts ...fiserv.ClientOption) (*Gateway, error) {
 		ClientInterface: clnt,
 	}, nil
 }
-
-// func (gw *Gateway) Auth(ctx context.Context, req *http.Request) error
-
-// auth, err := gw.ClientAuthInfoWriter(host)
-// if err != nil {
-// 	return nil, err
-// }
-
-// tr.DefaultAuthentication = auth
-
-// func (gw *Gateway) ClientAuthInfoWriter(host string) (runtime.ClientAuthInfoWriter, error) {
-// 	return gw.SignatureAuth(host), nil
-// }
-
-// func (gw *Gateway) NewHTTPClient(formats strfmt.Registry) (*client.FirstVision, error) {
-// 	tr, err := gw.Transport()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return client.New(tr, formats), nil
-// }

@@ -1,7 +1,9 @@
 package simple
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -34,36 +36,18 @@ func TestApi(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	requestId, err := uuid.NewV4()
+	txnId, err := uuid.NewV4()
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	params := fiserv.SubmitPrimaryTransactionParams{
-		ContentType: fiserv.ContentTypeParam_application_json,
+	txnIdStr := txnId.String()
 
-		// A client-generated ID for request tracking and signature creation, unique per request.  This is also used for idempotency control. We recommend 128-bit UUID format.
-		ClientRequestId: fiserv.ClientRequestIdParam(requestId.String()),
-
-		// Key given to merchant after boarding associating their requests with the appropriate app in Apigee.
-		ApiKey: fiserv.ApiKeyParam(os.Getenv("FISERV_KEY")),
-
-		// Epoch timestamp in milliseconds in the request from a client system. Used for Message Signature generation and time limit (5 mins).
-		Timestamp: fiserv.TimestampParam(time.Now().Unix()),
-
-		// Used to ensure the request has not been tampered with during transmission. The Message-Signature is the Base64 encoded HMAC hash (SHA256 algorithm with the API Secret as the key.) For more information, refer to the supporting documentation on the Developer Portal.
-		// MessageSignature MessageSignatureParam,
-
-		// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
-		// Region *RegionParam,
-	}
-
-	txnId := "bbq"
 	storeId := os.Getenv("FISERV_STORE")
 	origin := fiserv.TransactionOrigin_ECOM
 
 	req := fiserv.SubmitPrimaryTransactionJSONRequestBody{
-		MerchantTransactionId: &txnId,
+		MerchantTransactionId: &txnIdStr,
 		Order:                 &fiserv.Order{},
 		RequestType:           "requestType",
 		StoreId:               &storeId,
@@ -75,7 +59,45 @@ func TestApi(t *testing.T) {
 		TransactionOrigin: &origin,
 	}
 
-	resp, err := gw.SubmitPrimaryTransaction(context.Background(), &params, req)
+	var body bytes.Buffer
+	enc := json.NewEncoder(&body)
+	if err := enc.Encode(req); err != nil {
+		t.Fatal(err)
+	}
+
+	requestId, err := uuid.NewV4()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	msSinceEpoch := time.Now().Unix() * 1000
+
+	sig, err := gw.signature(requestId, msSinceEpoch, body.Bytes())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	params := fiserv.SubmitPrimaryTransactionParams{
+		// Content type.
+		ContentType: fiserv.ContentTypeParam_application_json,
+
+		// A client-generated ID for request tracking and signature creation, unique per request.  This is also used for idempotency control. We recommend 128-bit UUID format.
+		ClientRequestId: fiserv.ClientRequestIdParam(requestId.String()),
+
+		// Key given to merchant after boarding associating their requests with the appropriate app in Apigee.
+		ApiKey: fiserv.ApiKeyParam(os.Getenv("FISERV_KEY")),
+
+		// Epoch timestamp in milliseconds in the request from a client system. Used for Message Signature generation and time limit (5 mins).
+		Timestamp: fiserv.TimestampParam(msSinceEpoch),
+
+		// Used to ensure the request has not been tampered with during transmission. The Message-Signature is the Base64 encoded HMAC hash (SHA256 algorithm with the API Secret as the key.) For more information, refer to the supporting documentation on the Developer Portal.
+		MessageSignature: &sig,
+
+		// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
+		// Region *RegionParam,
+	}
+
+	resp, err := gw.SubmitPrimaryTransactionWithBody(context.Background(), &params, string(fiserv.ContentTypeParam_application_json), &body)
 	if err != nil {
 		t.Fatal(err)
 	}
