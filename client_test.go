@@ -1,4 +1,4 @@
-package simple
+package fiserv
 
 import (
 	"context"
@@ -7,24 +7,22 @@ import (
 	"testing"
 
 	"github.com/lufia/httpclientutil"
-	"github.com/tooolbox/fiserv"
 )
 
-func TestGateway(t *testing.T) {
+func TestClient(t *testing.T) {
 
 	// Credentials are from https://docs.firstdata.com/org/gateway/docs/api
 	// and they may be subject to change.
-	cfg := Config{
-		ApiKey:      "csn5gVMfGgXh1cnFtimlHQOH1zNERw7Q",
-		ApiSecret:   "9JiLZgNhQPTA1KIt",
-		Environment: "sandbox",
+	creds := Credentials{
+		ApiKey:    "csn5gVMfGgXh1cnFtimlHQOH1zNERw7Q",
+		ApiSecret: "9JiLZgNhQPTA1KIt",
 	}
 
-	client := http.Client{
+	httper := http.Client{
 		Transport: &httpclientutil.DumpTransport{},
 	}
 
-	gw, err := NewGateway(cfg, fiserv.WithHTTPClient(&client))
+	clnt, err := NewClient(SandboxServer, creds, WithHTTPClient(&httper))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,15 +46,10 @@ func TestGateway(t *testing.T) {
   }
 }`
 
-	hdrs, err := gw.GenHeaders([]byte(payload))
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if _, err := gw.SubmitPrimaryTransactionWithBody(
+	if _, err := clnt.SubmitPrimaryTransactionWithBody(
 		context.Background(),
-		fiserv.SubmitPrimaryTransactionParams{}.WithHeaders(hdrs),
-		string(hdrs.ContentType),
+		&SubmitPrimaryTransactionParams{},
+		"application/json",
 		strings.NewReader(payload),
 	); err != nil {
 		t.Fatal(err)
