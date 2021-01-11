@@ -53,17 +53,9 @@ func TestGateway(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	params := fiserv.SubmitPrimaryTransactionParams{
-		ApiKey:           hdrs.ApiKey,
-		Timestamp:        hdrs.Timestamp,
-		MessageSignature: &hdrs.MessageSignature,
-		ContentType:      hdrs.ContentType,
-		ClientRequestId:  hdrs.ClientRequestId,
-	}
-
 	if _, err := gw.SubmitPrimaryTransactionWithBody(
 		context.Background(),
-		&params,
+		fiserv.SubmitPrimaryTransactionParams{}.WithHeaders(hdrs),
 		string(hdrs.ContentType),
 		strings.NewReader(payload),
 	); err != nil {

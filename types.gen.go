@@ -2504,6 +2504,17 @@ type LookupAccountParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this LookupAccountParams) WithHeaders(hdr *HeaderData) *LookupAccountParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // VerifyAccountJSONBody defines parameters for VerifyAccount.
 type VerifyAccountJSONBody AccountVerificationRequest
 
@@ -2529,6 +2540,17 @@ type VerifyAccountParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this VerifyAccountParams) WithHeaders(hdr *HeaderData) *VerifyAccountParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // PostAuthenticationAccessTokensJSONBody defines parameters for PostAuthenticationAccessTokens.
 type PostAuthenticationAccessTokensJSONBody AccessTokenRequest
 
@@ -2549,6 +2571,16 @@ type PostAuthenticationAccessTokensParams struct {
 
 	// Used to ensure the request has not been tampered with during transmission. The Message-Signature is the Base64 encoded HMAC hash (SHA256 algorithm with the API Secret as the key.) For more information, refer to the supporting documentation on the Developer Portal.
 	MessageSignature *MessageSignatureParam `json:"Message-Signature,omitempty"`
+}
+
+func (this PostAuthenticationAccessTokensParams) WithHeaders(hdr *HeaderData) *PostAuthenticationAccessTokensParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+	return &this
 }
 
 // CardInfoLookupJSONBody defines parameters for CardInfoLookup.
@@ -2576,6 +2608,17 @@ type CardInfoLookupParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this CardInfoLookupParams) WithHeaders(hdr *HeaderData) *CardInfoLookupParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // VerifyCardJSONBody defines parameters for VerifyCard.
 type VerifyCardJSONBody CardVerificationRequest
 
@@ -2599,6 +2642,17 @@ type VerifyCardParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this VerifyCardParams) WithHeaders(hdr *HeaderData) *VerifyCardParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // GetExchangeRateJSONBody defines parameters for GetExchangeRate.
@@ -2626,6 +2680,17 @@ type GetExchangeRateParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this GetExchangeRateParams) WithHeaders(hdr *HeaderData) *GetExchangeRateParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // PostFraudClientRegistrationJSONBody defines parameters for PostFraudClientRegistration.
 type PostFraudClientRegistrationJSONBody ClientRegistration
 
@@ -2649,6 +2714,17 @@ type PostFraudClientRegistrationParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this PostFraudClientRegistrationParams) WithHeaders(hdr *HeaderData) *PostFraudClientRegistrationParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // PostFraudPaymentRegistrationJSONBody defines parameters for PostFraudPaymentRegistration.
@@ -2676,6 +2752,17 @@ type PostFraudPaymentRegistrationParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this PostFraudPaymentRegistrationParams) WithHeaders(hdr *HeaderData) *PostFraudPaymentRegistrationParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // ScoreOnlyJSONBody defines parameters for ScoreOnly.
 type ScoreOnlyJSONBody ScoreOnlyRequest
 
@@ -2699,6 +2786,17 @@ type ScoreOnlyParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this ScoreOnlyParams) WithHeaders(hdr *HeaderData) *ScoreOnlyParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // OrderInquiryParams defines parameters for OrderInquiry.
@@ -2726,6 +2824,17 @@ type OrderInquiryParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this OrderInquiryParams) WithHeaders(hdr *HeaderData) *OrderInquiryParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // SubmitSecondaryTransactionFromOrderParams defines parameters for SubmitSecondaryTransactionFromOrder.
 type SubmitSecondaryTransactionFromOrderParams struct {
 
@@ -2748,6 +2857,17 @@ type SubmitSecondaryTransactionFromOrderParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this SubmitSecondaryTransactionFromOrderParams) WithHeaders(hdr *HeaderData) *SubmitSecondaryTransactionFromOrderParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // CreatePaymentScheduleParams defines parameters for CreatePaymentSchedule.
 type CreatePaymentScheduleParams struct {
 
@@ -2768,6 +2888,17 @@ type CreatePaymentScheduleParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this CreatePaymentScheduleParams) WithHeaders(hdr *HeaderData) *CreatePaymentScheduleParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // CancelPaymentScheduleParams defines parameters for CancelPaymentSchedule.
@@ -2795,6 +2926,17 @@ type CancelPaymentScheduleParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this CancelPaymentScheduleParams) WithHeaders(hdr *HeaderData) *CancelPaymentScheduleParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // InquiryPaymentScheduleParams defines parameters for InquiryPaymentSchedule.
 type InquiryPaymentScheduleParams struct {
 
@@ -2820,6 +2962,17 @@ type InquiryPaymentScheduleParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this InquiryPaymentScheduleParams) WithHeaders(hdr *HeaderData) *InquiryPaymentScheduleParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // UpdatePaymentScheduleParams defines parameters for UpdatePaymentSchedule.
 type UpdatePaymentScheduleParams struct {
 
@@ -2840,6 +2993,17 @@ type UpdatePaymentScheduleParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this UpdatePaymentScheduleParams) WithHeaders(hdr *HeaderData) *UpdatePaymentScheduleParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // UpdatePaymentTokenJSONBody defines parameters for UpdatePaymentToken.
@@ -2870,6 +3034,17 @@ type UpdatePaymentTokenParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this UpdatePaymentTokenParams) WithHeaders(hdr *HeaderData) *UpdatePaymentTokenParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // CreatePaymentTokenJSONBody defines parameters for CreatePaymentToken.
 type CreatePaymentTokenJSONBody PaymentTokenizationRequest
 
@@ -2898,6 +3073,17 @@ type CreatePaymentTokenParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this CreatePaymentTokenParams) WithHeaders(hdr *HeaderData) *CreatePaymentTokenParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // DeletePaymentTokenParams defines parameters for DeletePaymentToken.
 type DeletePaymentTokenParams struct {
 	StoreId *string `json:"storeId,omitempty"`
@@ -2924,6 +3110,17 @@ type DeletePaymentTokenParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this DeletePaymentTokenParams) WithHeaders(hdr *HeaderData) *DeletePaymentTokenParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // GetPaymentTokenDetailsParams defines parameters for GetPaymentTokenDetails.
 type GetPaymentTokenDetailsParams struct {
 	StoreId *string `json:"storeId,omitempty"`
@@ -2948,6 +3145,17 @@ type GetPaymentTokenDetailsParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this GetPaymentTokenDetailsParams) WithHeaders(hdr *HeaderData) *GetPaymentTokenDetailsParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // DeletePaymentUrlParams defines parameters for DeletePaymentUrl.
@@ -2985,6 +3193,17 @@ type DeletePaymentUrlParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this DeletePaymentUrlParams) WithHeaders(hdr *HeaderData) *DeletePaymentUrlParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // PaymentUrlDetailParams defines parameters for PaymentUrlDetail.
@@ -3027,6 +3246,17 @@ type PaymentUrlDetailParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this PaymentUrlDetailParams) WithHeaders(hdr *HeaderData) *PaymentUrlDetailParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // CreatePaymentUrlJSONBody defines parameters for CreatePaymentUrl.
 type CreatePaymentUrlJSONBody PaymentUrlRequest
 
@@ -3050,6 +3280,17 @@ type CreatePaymentUrlParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this CreatePaymentUrlParams) WithHeaders(hdr *HeaderData) *CreatePaymentUrlParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // SubmitPrimaryTransactionJSONBody defines parameters for SubmitPrimaryTransaction.
@@ -3077,6 +3318,17 @@ type SubmitPrimaryTransactionParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this SubmitPrimaryTransactionParams) WithHeaders(hdr *HeaderData) *SubmitPrimaryTransactionParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // TransactionInquiryParams defines parameters for TransactionInquiry.
 type TransactionInquiryParams struct {
 
@@ -3100,6 +3352,17 @@ type TransactionInquiryParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this TransactionInquiryParams) WithHeaders(hdr *HeaderData) *TransactionInquiryParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // FinalizeSecureTransactionJSONBody defines parameters for FinalizeSecureTransaction.
@@ -3127,6 +3390,17 @@ type FinalizeSecureTransactionParams struct {
 	Region *RegionParam `json:"Region,omitempty"`
 }
 
+func (this FinalizeSecureTransactionParams) WithHeaders(hdr *HeaderData) *FinalizeSecureTransactionParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
+}
+
 // SubmitSecondaryTransactionParams defines parameters for SubmitSecondaryTransaction.
 type SubmitSecondaryTransactionParams struct {
 
@@ -3150,6 +3424,17 @@ type SubmitSecondaryTransactionParams struct {
 
 	// Indicates the region where the client wants the transaction to be processed. This will override the default processing region identified for the client. Available options are argentina, brazil, germany, india and northamerica. Region specific store setup and APIGEE boarding is required in order to use an alternate region for processing.
 	Region *RegionParam `json:"Region,omitempty"`
+}
+
+func (this SubmitSecondaryTransactionParams) WithHeaders(hdr *HeaderData) *SubmitSecondaryTransactionParams {
+
+	this.ContentType = hdr.ContentType
+	this.ClientRequestId = hdr.ClientRequestId
+	this.ApiKey = hdr.ApiKey
+	this.Timestamp = hdr.Timestamp
+	this.MessageSignature = &hdr.MessageSignature
+
+	return &this
 }
 
 // LookupAccountRequestBody defines body for LookupAccount for application/json ContentType.

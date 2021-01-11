@@ -1,6 +1,20 @@
 {{range .}}{{$opid := .OperationId}}
-{{range .TypeDefinitions}}
-// {{.TypeName}} defines parameters for {{$opid}}.
-type {{.TypeName}} {{.Schema.TypeDecl}}
+{{range .TypeDefinitions}}{{$tname := .TypeName}}
+// {{$tname}} defines parameters for {{$opid}}.
+type {{$tname}} {{.Schema.TypeDecl}}
+
+{{if gt (len .Schema.Properties) 0}}
+func (this {{$tname}}) WithHeaders(hdr *HeaderData) *{{$tname}} {
+{{range .Schema.Properties}}
+	{{if eq .GoTypeDef "ApiKeyParam"}}this.ApiKey = hdr.ApiKey{{end -}}
+	{{if eq .GoTypeDef "ContentTypeParam"}}this.ContentType = hdr.ContentType{{end -}}
+	{{if eq .GoTypeDef "ClientRequestIdParam"}}this.ClientRequestId = hdr.ClientRequestId{{end -}}
+	{{if eq .GoTypeDef "TimestampParam"}}this.Timestamp = hdr.Timestamp{{end -}}
+	{{if eq .GoTypeDef "*MessageSignatureParam"}}this.MessageSignature = &hdr.MessageSignature{{end -}}
+
+{{end}}
+	return &this
+}
+{{end}}
 {{end}}
 {{end}}
