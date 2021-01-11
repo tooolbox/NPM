@@ -24,15 +24,7 @@ type Config struct {
 	Environment string
 }
 
-type HeaderData struct {
-	ApiKey           fiserv.ApiKeyParam
-	ContentType      fiserv.ContentTypeParam
-	ClientRequestId  fiserv.ClientRequestIdParam
-	Timestamp        fiserv.TimestampParam
-	MessageSignature fiserv.MessageSignatureParam
-}
-
-func (cfg Config) genHeaders(payload []byte, clientRequestId string, now time.Time) (*HeaderData, error) {
+func (cfg Config) genHeaders(payload []byte, clientRequestId string, now time.Time) (*fiserv.HeaderData, error) {
 
 	// equivalent python code:
 	//
@@ -57,7 +49,7 @@ func (cfg Config) genHeaders(payload []byte, clientRequestId string, now time.Ti
 		return nil, err
 	}
 
-	return &HeaderData{
+	return &fiserv.HeaderData{
 		ApiKey:           fiserv.ApiKeyParam(cfg.ApiKey),
 		ContentType:      fiserv.ContentTypeParam_application_json,
 		ClientRequestId:  fiserv.ClientRequestIdParam(clientRequestId),

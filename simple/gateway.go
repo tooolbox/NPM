@@ -39,7 +39,7 @@ func NewGateway(cfg Config, opts ...fiserv.ClientOption) (*Gateway, error) {
 	}, nil
 }
 
-func (gw *Gateway) GenHeaders(payload []byte) (*HeaderData, error) {
+func (gw *Gateway) GenHeaders(payload []byte) (*fiserv.HeaderData, error) {
 	clientRequestId, err := uuid.NewV4()
 	if err != nil {
 		return nil, err
