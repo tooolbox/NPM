@@ -1,6 +1,6 @@
 # Fiserv Go SDK
 
-[![Godoc](https://pkg.go.dev/github.com/tooolbox/fiserv?status.svg)](https://pkg.go.dev/github.com/tooolbox/fiserv)
+[![Go Reference](https://pkg.go.dev/badge/github.com/tooolbox/fiserv.svg)](https://pkg.go.dev/github.com/tooolbox/fiserv)
 
 Fiserv RESTful Web Services
 
