@@ -15,22 +15,37 @@ With Go Modules:
 package main
 
 import (
-    "github.com/tooolbox/fiserv/simple"
+    "fmt"
+    "github.com/tooolbox/fiserv"
 )
 
 func main() {
-    cfg := simple.Config{
-        ApiKey: "...",
+    creds := fiserv.Credentials{
+        ApiKey:    "...",
         ApiSecret: "...",
-        Environment: simple.ProdEnvironment,
     }
 
-    gw, err := simple.NewGateway(cfg)
+    clnt, err := fiserv.NewClientWithResponses(fiserv.SandboxServer, creds)
     if err != nil {
         panic(err)
     }
 
-    // ...
+    // Calls will automatically generate the authentication signature.
+    resp, err := clnt.SubmitPrimaryTransactionWithResponse(
+        context.Background(),
+        &fiserv.SubmitPrimaryTransactionParams{
+            // Params will be automatically populated
+            // with signature-related headers.
+        },
+        &fiserv.SubmitPrimaryTransactionJSONBody{
+            // ...
+        },
+    )
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Println(resp.JSON200.ApprovedAmount.Total)
 }
 ```
 
