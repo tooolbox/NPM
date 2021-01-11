@@ -5,8 +5,8 @@ type ClientWithResponses struct {
 
 // NewClientWithResponses creates a new ClientWithResponses, which wraps
 // Client with return type handling
-func NewClientWithResponses(server string, opts ...ClientOption) (*ClientWithResponses, error) {
-    client, err := NewClient(server, opts...)
+func NewClientWithResponses(server string, creds Credentials, opts ...ClientOption) (*ClientWithResponses, error) {
+    client, err := NewClient(server, creds, opts...)
     if err != nil {
         return nil, err
     }

@@ -42,16 +42,20 @@ type Client struct {
 	// A callback for modifying requests which are generated before sending over
 	// the network.
 	RequestEditor RequestEditorFn
+
+	// The API key and secret.
+	Creds Credentials
 }
 
 // ClientOption allows setting custom parameters during construction
 type ClientOption func(*Client) error
 
 // Creates a new Client, with reasonable defaults
-func NewClient(server string, opts ...ClientOption) (*Client, error) {
+func NewClient(server string, creds Credentials, opts ...ClientOption) (*Client, error) {
 	// create a client with sane default values
 	client := Client{
 		Server: server,
+		Creds:  creds,
 	}
 	// mutate client and add all optional params
 	for _, o := range opts {
@@ -206,7 +210,7 @@ type ClientInterface interface {
 }
 
 func (c *Client) LookupAccountWithBody(ctx context.Context, params *LookupAccountParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewLookupAccountRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewLookupAccountRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +225,7 @@ func (c *Client) LookupAccountWithBody(ctx context.Context, params *LookupAccoun
 }
 
 func (c *Client) LookupAccount(ctx context.Context, params *LookupAccountParams, body LookupAccountJSONRequestBody) (*http.Response, error) {
-	req, err := NewLookupAccountRequest(c.Server, params, body)
+	req, err := NewLookupAccountRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -236,7 +240,7 @@ func (c *Client) LookupAccount(ctx context.Context, params *LookupAccountParams,
 }
 
 func (c *Client) VerifyAccountWithBody(ctx context.Context, params *VerifyAccountParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewVerifyAccountRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewVerifyAccountRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -251,7 +255,7 @@ func (c *Client) VerifyAccountWithBody(ctx context.Context, params *VerifyAccoun
 }
 
 func (c *Client) VerifyAccount(ctx context.Context, params *VerifyAccountParams, body VerifyAccountJSONRequestBody) (*http.Response, error) {
-	req, err := NewVerifyAccountRequest(c.Server, params, body)
+	req, err := NewVerifyAccountRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -266,7 +270,7 @@ func (c *Client) VerifyAccount(ctx context.Context, params *VerifyAccountParams,
 }
 
 func (c *Client) PostAuthenticationAccessTokensWithBody(ctx context.Context, params *PostAuthenticationAccessTokensParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewPostAuthenticationAccessTokensRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewPostAuthenticationAccessTokensRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -281,7 +285,7 @@ func (c *Client) PostAuthenticationAccessTokensWithBody(ctx context.Context, par
 }
 
 func (c *Client) PostAuthenticationAccessTokens(ctx context.Context, params *PostAuthenticationAccessTokensParams, body PostAuthenticationAccessTokensJSONRequestBody) (*http.Response, error) {
-	req, err := NewPostAuthenticationAccessTokensRequest(c.Server, params, body)
+	req, err := NewPostAuthenticationAccessTokensRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -296,7 +300,7 @@ func (c *Client) PostAuthenticationAccessTokens(ctx context.Context, params *Pos
 }
 
 func (c *Client) CardInfoLookupWithBody(ctx context.Context, params *CardInfoLookupParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewCardInfoLookupRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewCardInfoLookupRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -311,7 +315,7 @@ func (c *Client) CardInfoLookupWithBody(ctx context.Context, params *CardInfoLoo
 }
 
 func (c *Client) CardInfoLookup(ctx context.Context, params *CardInfoLookupParams, body CardInfoLookupJSONRequestBody) (*http.Response, error) {
-	req, err := NewCardInfoLookupRequest(c.Server, params, body)
+	req, err := NewCardInfoLookupRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -326,7 +330,7 @@ func (c *Client) CardInfoLookup(ctx context.Context, params *CardInfoLookupParam
 }
 
 func (c *Client) VerifyCardWithBody(ctx context.Context, params *VerifyCardParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewVerifyCardRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewVerifyCardRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -341,7 +345,7 @@ func (c *Client) VerifyCardWithBody(ctx context.Context, params *VerifyCardParam
 }
 
 func (c *Client) VerifyCard(ctx context.Context, params *VerifyCardParams, body VerifyCardJSONRequestBody) (*http.Response, error) {
-	req, err := NewVerifyCardRequest(c.Server, params, body)
+	req, err := NewVerifyCardRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -356,7 +360,7 @@ func (c *Client) VerifyCard(ctx context.Context, params *VerifyCardParams, body 
 }
 
 func (c *Client) GetExchangeRateWithBody(ctx context.Context, params *GetExchangeRateParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewGetExchangeRateRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewGetExchangeRateRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -371,7 +375,7 @@ func (c *Client) GetExchangeRateWithBody(ctx context.Context, params *GetExchang
 }
 
 func (c *Client) GetExchangeRate(ctx context.Context, params *GetExchangeRateParams, body GetExchangeRateJSONRequestBody) (*http.Response, error) {
-	req, err := NewGetExchangeRateRequest(c.Server, params, body)
+	req, err := NewGetExchangeRateRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -386,7 +390,7 @@ func (c *Client) GetExchangeRate(ctx context.Context, params *GetExchangeRatePar
 }
 
 func (c *Client) PostFraudClientRegistrationWithBody(ctx context.Context, params *PostFraudClientRegistrationParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewPostFraudClientRegistrationRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewPostFraudClientRegistrationRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -401,7 +405,7 @@ func (c *Client) PostFraudClientRegistrationWithBody(ctx context.Context, params
 }
 
 func (c *Client) PostFraudClientRegistration(ctx context.Context, params *PostFraudClientRegistrationParams, body PostFraudClientRegistrationJSONRequestBody) (*http.Response, error) {
-	req, err := NewPostFraudClientRegistrationRequest(c.Server, params, body)
+	req, err := NewPostFraudClientRegistrationRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -416,7 +420,7 @@ func (c *Client) PostFraudClientRegistration(ctx context.Context, params *PostFr
 }
 
 func (c *Client) PostFraudPaymentRegistrationWithBody(ctx context.Context, params *PostFraudPaymentRegistrationParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewPostFraudPaymentRegistrationRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewPostFraudPaymentRegistrationRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -431,7 +435,7 @@ func (c *Client) PostFraudPaymentRegistrationWithBody(ctx context.Context, param
 }
 
 func (c *Client) PostFraudPaymentRegistration(ctx context.Context, params *PostFraudPaymentRegistrationParams, body PostFraudPaymentRegistrationJSONRequestBody) (*http.Response, error) {
-	req, err := NewPostFraudPaymentRegistrationRequest(c.Server, params, body)
+	req, err := NewPostFraudPaymentRegistrationRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -446,7 +450,7 @@ func (c *Client) PostFraudPaymentRegistration(ctx context.Context, params *PostF
 }
 
 func (c *Client) ScoreOnlyWithBody(ctx context.Context, params *ScoreOnlyParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewScoreOnlyRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewScoreOnlyRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -461,7 +465,7 @@ func (c *Client) ScoreOnlyWithBody(ctx context.Context, params *ScoreOnlyParams,
 }
 
 func (c *Client) ScoreOnly(ctx context.Context, params *ScoreOnlyParams, body ScoreOnlyJSONRequestBody) (*http.Response, error) {
-	req, err := NewScoreOnlyRequest(c.Server, params, body)
+	req, err := NewScoreOnlyRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -476,7 +480,7 @@ func (c *Client) ScoreOnly(ctx context.Context, params *ScoreOnlyParams, body Sc
 }
 
 func (c *Client) OrderInquiry(ctx context.Context, orderId OrderIdParam, params *OrderInquiryParams) (*http.Response, error) {
-	req, err := NewOrderInquiryRequest(c.Server, orderId, params)
+	req, err := NewOrderInquiryRequest(c.Creds, c.Server, orderId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -491,7 +495,7 @@ func (c *Client) OrderInquiry(ctx context.Context, orderId OrderIdParam, params 
 }
 
 func (c *Client) SubmitSecondaryTransactionFromOrderWithBody(ctx context.Context, orderId OrderIdParam, params *SubmitSecondaryTransactionFromOrderParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewSubmitSecondaryTransactionFromOrderRequestWithBody(c.Server, orderId, params, contentType, body)
+	req, err := NewSubmitSecondaryTransactionFromOrderRequestWithBody(c.Creds, c.Server, orderId, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -506,7 +510,7 @@ func (c *Client) SubmitSecondaryTransactionFromOrderWithBody(ctx context.Context
 }
 
 func (c *Client) SubmitSecondaryTransactionFromOrder(ctx context.Context, orderId OrderIdParam, params *SubmitSecondaryTransactionFromOrderParams, body SubmitSecondaryTransactionFromOrderJSONRequestBody) (*http.Response, error) {
-	req, err := NewSubmitSecondaryTransactionFromOrderRequest(c.Server, orderId, params, body)
+	req, err := NewSubmitSecondaryTransactionFromOrderRequest(c.Creds, c.Server, orderId, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -521,7 +525,7 @@ func (c *Client) SubmitSecondaryTransactionFromOrder(ctx context.Context, orderI
 }
 
 func (c *Client) CreatePaymentScheduleWithBody(ctx context.Context, params *CreatePaymentScheduleParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewCreatePaymentScheduleRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewCreatePaymentScheduleRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -536,7 +540,7 @@ func (c *Client) CreatePaymentScheduleWithBody(ctx context.Context, params *Crea
 }
 
 func (c *Client) CreatePaymentSchedule(ctx context.Context, params *CreatePaymentScheduleParams, body CreatePaymentScheduleJSONRequestBody) (*http.Response, error) {
-	req, err := NewCreatePaymentScheduleRequest(c.Server, params, body)
+	req, err := NewCreatePaymentScheduleRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -551,7 +555,7 @@ func (c *Client) CreatePaymentSchedule(ctx context.Context, params *CreatePaymen
 }
 
 func (c *Client) CancelPaymentSchedule(ctx context.Context, orderId OrderIdParam, params *CancelPaymentScheduleParams) (*http.Response, error) {
-	req, err := NewCancelPaymentScheduleRequest(c.Server, orderId, params)
+	req, err := NewCancelPaymentScheduleRequest(c.Creds, c.Server, orderId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -566,7 +570,7 @@ func (c *Client) CancelPaymentSchedule(ctx context.Context, orderId OrderIdParam
 }
 
 func (c *Client) InquiryPaymentSchedule(ctx context.Context, orderId OrderIdParam, params *InquiryPaymentScheduleParams) (*http.Response, error) {
-	req, err := NewInquiryPaymentScheduleRequest(c.Server, orderId, params)
+	req, err := NewInquiryPaymentScheduleRequest(c.Creds, c.Server, orderId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -581,7 +585,7 @@ func (c *Client) InquiryPaymentSchedule(ctx context.Context, orderId OrderIdPara
 }
 
 func (c *Client) UpdatePaymentScheduleWithBody(ctx context.Context, orderId OrderIdParam, params *UpdatePaymentScheduleParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewUpdatePaymentScheduleRequestWithBody(c.Server, orderId, params, contentType, body)
+	req, err := NewUpdatePaymentScheduleRequestWithBody(c.Creds, c.Server, orderId, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -596,7 +600,7 @@ func (c *Client) UpdatePaymentScheduleWithBody(ctx context.Context, orderId Orde
 }
 
 func (c *Client) UpdatePaymentSchedule(ctx context.Context, orderId OrderIdParam, params *UpdatePaymentScheduleParams, body UpdatePaymentScheduleJSONRequestBody) (*http.Response, error) {
-	req, err := NewUpdatePaymentScheduleRequest(c.Server, orderId, params, body)
+	req, err := NewUpdatePaymentScheduleRequest(c.Creds, c.Server, orderId, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -611,7 +615,7 @@ func (c *Client) UpdatePaymentSchedule(ctx context.Context, orderId OrderIdParam
 }
 
 func (c *Client) UpdatePaymentTokenWithBody(ctx context.Context, params *UpdatePaymentTokenParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewUpdatePaymentTokenRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewUpdatePaymentTokenRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -626,7 +630,7 @@ func (c *Client) UpdatePaymentTokenWithBody(ctx context.Context, params *UpdateP
 }
 
 func (c *Client) UpdatePaymentToken(ctx context.Context, params *UpdatePaymentTokenParams, body UpdatePaymentTokenJSONRequestBody) (*http.Response, error) {
-	req, err := NewUpdatePaymentTokenRequest(c.Server, params, body)
+	req, err := NewUpdatePaymentTokenRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -641,7 +645,7 @@ func (c *Client) UpdatePaymentToken(ctx context.Context, params *UpdatePaymentTo
 }
 
 func (c *Client) CreatePaymentTokenWithBody(ctx context.Context, params *CreatePaymentTokenParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewCreatePaymentTokenRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewCreatePaymentTokenRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -656,7 +660,7 @@ func (c *Client) CreatePaymentTokenWithBody(ctx context.Context, params *CreateP
 }
 
 func (c *Client) CreatePaymentToken(ctx context.Context, params *CreatePaymentTokenParams, body CreatePaymentTokenJSONRequestBody) (*http.Response, error) {
-	req, err := NewCreatePaymentTokenRequest(c.Server, params, body)
+	req, err := NewCreatePaymentTokenRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -671,7 +675,7 @@ func (c *Client) CreatePaymentToken(ctx context.Context, params *CreatePaymentTo
 }
 
 func (c *Client) DeletePaymentToken(ctx context.Context, tokenId TokenIdParam, params *DeletePaymentTokenParams) (*http.Response, error) {
-	req, err := NewDeletePaymentTokenRequest(c.Server, tokenId, params)
+	req, err := NewDeletePaymentTokenRequest(c.Creds, c.Server, tokenId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -686,7 +690,7 @@ func (c *Client) DeletePaymentToken(ctx context.Context, tokenId TokenIdParam, p
 }
 
 func (c *Client) GetPaymentTokenDetails(ctx context.Context, tokenId TokenIdParam, params *GetPaymentTokenDetailsParams) (*http.Response, error) {
-	req, err := NewGetPaymentTokenDetailsRequest(c.Server, tokenId, params)
+	req, err := NewGetPaymentTokenDetailsRequest(c.Creds, c.Server, tokenId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -701,7 +705,7 @@ func (c *Client) GetPaymentTokenDetails(ctx context.Context, tokenId TokenIdPara
 }
 
 func (c *Client) DeletePaymentUrl(ctx context.Context, params *DeletePaymentUrlParams) (*http.Response, error) {
-	req, err := NewDeletePaymentUrlRequest(c.Server, params)
+	req, err := NewDeletePaymentUrlRequest(c.Creds, c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -716,7 +720,7 @@ func (c *Client) DeletePaymentUrl(ctx context.Context, params *DeletePaymentUrlP
 }
 
 func (c *Client) PaymentUrlDetail(ctx context.Context, params *PaymentUrlDetailParams) (*http.Response, error) {
-	req, err := NewPaymentUrlDetailRequest(c.Server, params)
+	req, err := NewPaymentUrlDetailRequest(c.Creds, c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -731,7 +735,7 @@ func (c *Client) PaymentUrlDetail(ctx context.Context, params *PaymentUrlDetailP
 }
 
 func (c *Client) CreatePaymentUrlWithBody(ctx context.Context, params *CreatePaymentUrlParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewCreatePaymentUrlRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewCreatePaymentUrlRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -746,7 +750,7 @@ func (c *Client) CreatePaymentUrlWithBody(ctx context.Context, params *CreatePay
 }
 
 func (c *Client) CreatePaymentUrl(ctx context.Context, params *CreatePaymentUrlParams, body CreatePaymentUrlJSONRequestBody) (*http.Response, error) {
-	req, err := NewCreatePaymentUrlRequest(c.Server, params, body)
+	req, err := NewCreatePaymentUrlRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -761,7 +765,7 @@ func (c *Client) CreatePaymentUrl(ctx context.Context, params *CreatePaymentUrlP
 }
 
 func (c *Client) SubmitPrimaryTransactionWithBody(ctx context.Context, params *SubmitPrimaryTransactionParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewSubmitPrimaryTransactionRequestWithBody(c.Server, params, contentType, body)
+	req, err := NewSubmitPrimaryTransactionRequestWithBody(c.Creds, c.Server, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -776,7 +780,7 @@ func (c *Client) SubmitPrimaryTransactionWithBody(ctx context.Context, params *S
 }
 
 func (c *Client) SubmitPrimaryTransaction(ctx context.Context, params *SubmitPrimaryTransactionParams, body SubmitPrimaryTransactionJSONRequestBody) (*http.Response, error) {
-	req, err := NewSubmitPrimaryTransactionRequest(c.Server, params, body)
+	req, err := NewSubmitPrimaryTransactionRequest(c.Creds, c.Server, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -791,7 +795,7 @@ func (c *Client) SubmitPrimaryTransaction(ctx context.Context, params *SubmitPri
 }
 
 func (c *Client) TransactionInquiry(ctx context.Context, transactionId TransactionIdParam, params *TransactionInquiryParams) (*http.Response, error) {
-	req, err := NewTransactionInquiryRequest(c.Server, transactionId, params)
+	req, err := NewTransactionInquiryRequest(c.Creds, c.Server, transactionId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -806,7 +810,7 @@ func (c *Client) TransactionInquiry(ctx context.Context, transactionId Transacti
 }
 
 func (c *Client) FinalizeSecureTransactionWithBody(ctx context.Context, transactionId TransactionIdParam, params *FinalizeSecureTransactionParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewFinalizeSecureTransactionRequestWithBody(c.Server, transactionId, params, contentType, body)
+	req, err := NewFinalizeSecureTransactionRequestWithBody(c.Creds, c.Server, transactionId, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -821,7 +825,7 @@ func (c *Client) FinalizeSecureTransactionWithBody(ctx context.Context, transact
 }
 
 func (c *Client) FinalizeSecureTransaction(ctx context.Context, transactionId TransactionIdParam, params *FinalizeSecureTransactionParams, body FinalizeSecureTransactionJSONRequestBody) (*http.Response, error) {
-	req, err := NewFinalizeSecureTransactionRequest(c.Server, transactionId, params, body)
+	req, err := NewFinalizeSecureTransactionRequest(c.Creds, c.Server, transactionId, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -836,7 +840,7 @@ func (c *Client) FinalizeSecureTransaction(ctx context.Context, transactionId Tr
 }
 
 func (c *Client) SubmitSecondaryTransactionWithBody(ctx context.Context, transactionId TransactionIdParam, params *SubmitSecondaryTransactionParams, contentType string, body io.Reader) (*http.Response, error) {
-	req, err := NewSubmitSecondaryTransactionRequestWithBody(c.Server, transactionId, params, contentType, body)
+	req, err := NewSubmitSecondaryTransactionRequestWithBody(c.Creds, c.Server, transactionId, params, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -851,7 +855,7 @@ func (c *Client) SubmitSecondaryTransactionWithBody(ctx context.Context, transac
 }
 
 func (c *Client) SubmitSecondaryTransaction(ctx context.Context, transactionId TransactionIdParam, params *SubmitSecondaryTransactionParams, body SubmitSecondaryTransactionJSONRequestBody) (*http.Response, error) {
-	req, err := NewSubmitSecondaryTransactionRequest(c.Server, transactionId, params, body)
+	req, err := NewSubmitSecondaryTransactionRequest(c.Creds, c.Server, transactionId, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -866,19 +870,37 @@ func (c *Client) SubmitSecondaryTransaction(ctx context.Context, transactionId T
 }
 
 // NewLookupAccountRequest calls the generic LookupAccount builder with application/json body
-func NewLookupAccountRequest(server string, params *LookupAccountParams, body LookupAccountJSONRequestBody) (*http.Request, error) {
+func NewLookupAccountRequest(creds Credentials, server string, params *LookupAccountParams, body LookupAccountJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewLookupAccountRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewLookupAccountRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewLookupAccountRequestWithBody generates requests for LookupAccount with any type of body
-func NewLookupAccountRequestWithBody(server string, params *LookupAccountParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewLookupAccountRequestWithBody(creds Credentials, server string, params *LookupAccountParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -964,19 +986,37 @@ func NewLookupAccountRequestWithBody(server string, params *LookupAccountParams,
 }
 
 // NewVerifyAccountRequest calls the generic VerifyAccount builder with application/json body
-func NewVerifyAccountRequest(server string, params *VerifyAccountParams, body VerifyAccountJSONRequestBody) (*http.Request, error) {
+func NewVerifyAccountRequest(creds Credentials, server string, params *VerifyAccountParams, body VerifyAccountJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewVerifyAccountRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewVerifyAccountRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewVerifyAccountRequestWithBody generates requests for VerifyAccount with any type of body
-func NewVerifyAccountRequestWithBody(server string, params *VerifyAccountParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewVerifyAccountRequestWithBody(creds Credentials, server string, params *VerifyAccountParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1062,19 +1102,37 @@ func NewVerifyAccountRequestWithBody(server string, params *VerifyAccountParams,
 }
 
 // NewPostAuthenticationAccessTokensRequest calls the generic PostAuthenticationAccessTokens builder with application/json body
-func NewPostAuthenticationAccessTokensRequest(server string, params *PostAuthenticationAccessTokensParams, body PostAuthenticationAccessTokensJSONRequestBody) (*http.Request, error) {
+func NewPostAuthenticationAccessTokensRequest(creds Credentials, server string, params *PostAuthenticationAccessTokensParams, body PostAuthenticationAccessTokensJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostAuthenticationAccessTokensRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewPostAuthenticationAccessTokensRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewPostAuthenticationAccessTokensRequestWithBody generates requests for PostAuthenticationAccessTokens with any type of body
-func NewPostAuthenticationAccessTokensRequestWithBody(server string, params *PostAuthenticationAccessTokensParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewPostAuthenticationAccessTokensRequestWithBody(creds Credentials, server string, params *PostAuthenticationAccessTokensParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1149,19 +1207,37 @@ func NewPostAuthenticationAccessTokensRequestWithBody(server string, params *Pos
 }
 
 // NewCardInfoLookupRequest calls the generic CardInfoLookup builder with application/json body
-func NewCardInfoLookupRequest(server string, params *CardInfoLookupParams, body CardInfoLookupJSONRequestBody) (*http.Request, error) {
+func NewCardInfoLookupRequest(creds Credentials, server string, params *CardInfoLookupParams, body CardInfoLookupJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewCardInfoLookupRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewCardInfoLookupRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewCardInfoLookupRequestWithBody generates requests for CardInfoLookup with any type of body
-func NewCardInfoLookupRequestWithBody(server string, params *CardInfoLookupParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewCardInfoLookupRequestWithBody(creds Credentials, server string, params *CardInfoLookupParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1247,19 +1323,37 @@ func NewCardInfoLookupRequestWithBody(server string, params *CardInfoLookupParam
 }
 
 // NewVerifyCardRequest calls the generic VerifyCard builder with application/json body
-func NewVerifyCardRequest(server string, params *VerifyCardParams, body VerifyCardJSONRequestBody) (*http.Request, error) {
+func NewVerifyCardRequest(creds Credentials, server string, params *VerifyCardParams, body VerifyCardJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewVerifyCardRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewVerifyCardRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewVerifyCardRequestWithBody generates requests for VerifyCard with any type of body
-func NewVerifyCardRequestWithBody(server string, params *VerifyCardParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewVerifyCardRequestWithBody(creds Credentials, server string, params *VerifyCardParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1345,19 +1439,37 @@ func NewVerifyCardRequestWithBody(server string, params *VerifyCardParams, conte
 }
 
 // NewGetExchangeRateRequest calls the generic GetExchangeRate builder with application/json body
-func NewGetExchangeRateRequest(server string, params *GetExchangeRateParams, body GetExchangeRateJSONRequestBody) (*http.Request, error) {
+func NewGetExchangeRateRequest(creds Credentials, server string, params *GetExchangeRateParams, body GetExchangeRateJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewGetExchangeRateRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewGetExchangeRateRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewGetExchangeRateRequestWithBody generates requests for GetExchangeRate with any type of body
-func NewGetExchangeRateRequestWithBody(server string, params *GetExchangeRateParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewGetExchangeRateRequestWithBody(creds Credentials, server string, params *GetExchangeRateParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1443,19 +1555,37 @@ func NewGetExchangeRateRequestWithBody(server string, params *GetExchangeRatePar
 }
 
 // NewPostFraudClientRegistrationRequest calls the generic PostFraudClientRegistration builder with application/json body
-func NewPostFraudClientRegistrationRequest(server string, params *PostFraudClientRegistrationParams, body PostFraudClientRegistrationJSONRequestBody) (*http.Request, error) {
+func NewPostFraudClientRegistrationRequest(creds Credentials, server string, params *PostFraudClientRegistrationParams, body PostFraudClientRegistrationJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostFraudClientRegistrationRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewPostFraudClientRegistrationRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewPostFraudClientRegistrationRequestWithBody generates requests for PostFraudClientRegistration with any type of body
-func NewPostFraudClientRegistrationRequestWithBody(server string, params *PostFraudClientRegistrationParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewPostFraudClientRegistrationRequestWithBody(creds Credentials, server string, params *PostFraudClientRegistrationParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1541,19 +1671,37 @@ func NewPostFraudClientRegistrationRequestWithBody(server string, params *PostFr
 }
 
 // NewPostFraudPaymentRegistrationRequest calls the generic PostFraudPaymentRegistration builder with application/json body
-func NewPostFraudPaymentRegistrationRequest(server string, params *PostFraudPaymentRegistrationParams, body PostFraudPaymentRegistrationJSONRequestBody) (*http.Request, error) {
+func NewPostFraudPaymentRegistrationRequest(creds Credentials, server string, params *PostFraudPaymentRegistrationParams, body PostFraudPaymentRegistrationJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostFraudPaymentRegistrationRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewPostFraudPaymentRegistrationRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewPostFraudPaymentRegistrationRequestWithBody generates requests for PostFraudPaymentRegistration with any type of body
-func NewPostFraudPaymentRegistrationRequestWithBody(server string, params *PostFraudPaymentRegistrationParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewPostFraudPaymentRegistrationRequestWithBody(creds Credentials, server string, params *PostFraudPaymentRegistrationParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1639,19 +1787,37 @@ func NewPostFraudPaymentRegistrationRequestWithBody(server string, params *PostF
 }
 
 // NewScoreOnlyRequest calls the generic ScoreOnly builder with application/json body
-func NewScoreOnlyRequest(server string, params *ScoreOnlyParams, body ScoreOnlyJSONRequestBody) (*http.Request, error) {
+func NewScoreOnlyRequest(creds Credentials, server string, params *ScoreOnlyParams, body ScoreOnlyJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewScoreOnlyRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewScoreOnlyRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewScoreOnlyRequestWithBody generates requests for ScoreOnly with any type of body
-func NewScoreOnlyRequestWithBody(server string, params *ScoreOnlyParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewScoreOnlyRequestWithBody(creds Credentials, server string, params *ScoreOnlyParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -1737,8 +1903,15 @@ func NewScoreOnlyRequestWithBody(server string, params *ScoreOnlyParams, content
 }
 
 // NewOrderInquiryRequest generates requests for OrderInquiry
-func NewOrderInquiryRequest(server string, orderId OrderIdParam, params *OrderInquiryParams) (*http.Request, error) {
+func NewOrderInquiryRequest(creds Credentials, server string, orderId OrderIdParam, params *OrderInquiryParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -1849,19 +2022,37 @@ func NewOrderInquiryRequest(server string, orderId OrderIdParam, params *OrderIn
 }
 
 // NewSubmitSecondaryTransactionFromOrderRequest calls the generic SubmitSecondaryTransactionFromOrder builder with application/json body
-func NewSubmitSecondaryTransactionFromOrderRequest(server string, orderId OrderIdParam, params *SubmitSecondaryTransactionFromOrderParams, body SubmitSecondaryTransactionFromOrderJSONRequestBody) (*http.Request, error) {
+func NewSubmitSecondaryTransactionFromOrderRequest(creds Credentials, server string, orderId OrderIdParam, params *SubmitSecondaryTransactionFromOrderParams, body SubmitSecondaryTransactionFromOrderJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewSubmitSecondaryTransactionFromOrderRequestWithBody(server, orderId, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewSubmitSecondaryTransactionFromOrderRequestWithBody(creds, server, orderId, params, "application/json", bodyReader)
 }
 
 // NewSubmitSecondaryTransactionFromOrderRequestWithBody generates requests for SubmitSecondaryTransactionFromOrder with any type of body
-func NewSubmitSecondaryTransactionFromOrderRequestWithBody(server string, orderId OrderIdParam, params *SubmitSecondaryTransactionFromOrderParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewSubmitSecondaryTransactionFromOrderRequestWithBody(creds Credentials, server string, orderId OrderIdParam, params *SubmitSecondaryTransactionFromOrderParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -1954,19 +2145,37 @@ func NewSubmitSecondaryTransactionFromOrderRequestWithBody(server string, orderI
 }
 
 // NewCreatePaymentScheduleRequest calls the generic CreatePaymentSchedule builder with application/json body
-func NewCreatePaymentScheduleRequest(server string, params *CreatePaymentScheduleParams, body CreatePaymentScheduleJSONRequestBody) (*http.Request, error) {
+func NewCreatePaymentScheduleRequest(creds Credentials, server string, params *CreatePaymentScheduleParams, body CreatePaymentScheduleJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewCreatePaymentScheduleRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewCreatePaymentScheduleRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewCreatePaymentScheduleRequestWithBody generates requests for CreatePaymentSchedule with any type of body
-func NewCreatePaymentScheduleRequestWithBody(server string, params *CreatePaymentScheduleParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewCreatePaymentScheduleRequestWithBody(creds Credentials, server string, params *CreatePaymentScheduleParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -2052,8 +2261,15 @@ func NewCreatePaymentScheduleRequestWithBody(server string, params *CreatePaymen
 }
 
 // NewCancelPaymentScheduleRequest generates requests for CancelPaymentSchedule
-func NewCancelPaymentScheduleRequest(server string, orderId OrderIdParam, params *CancelPaymentScheduleParams) (*http.Request, error) {
+func NewCancelPaymentScheduleRequest(creds Credentials, server string, orderId OrderIdParam, params *CancelPaymentScheduleParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -2164,8 +2380,15 @@ func NewCancelPaymentScheduleRequest(server string, orderId OrderIdParam, params
 }
 
 // NewInquiryPaymentScheduleRequest generates requests for InquiryPaymentSchedule
-func NewInquiryPaymentScheduleRequest(server string, orderId OrderIdParam, params *InquiryPaymentScheduleParams) (*http.Request, error) {
+func NewInquiryPaymentScheduleRequest(creds Credentials, server string, orderId OrderIdParam, params *InquiryPaymentScheduleParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -2276,19 +2499,37 @@ func NewInquiryPaymentScheduleRequest(server string, orderId OrderIdParam, param
 }
 
 // NewUpdatePaymentScheduleRequest calls the generic UpdatePaymentSchedule builder with application/json body
-func NewUpdatePaymentScheduleRequest(server string, orderId OrderIdParam, params *UpdatePaymentScheduleParams, body UpdatePaymentScheduleJSONRequestBody) (*http.Request, error) {
+func NewUpdatePaymentScheduleRequest(creds Credentials, server string, orderId OrderIdParam, params *UpdatePaymentScheduleParams, body UpdatePaymentScheduleJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewUpdatePaymentScheduleRequestWithBody(server, orderId, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewUpdatePaymentScheduleRequestWithBody(creds, server, orderId, params, "application/json", bodyReader)
 }
 
 // NewUpdatePaymentScheduleRequestWithBody generates requests for UpdatePaymentSchedule with any type of body
-func NewUpdatePaymentScheduleRequestWithBody(server string, orderId OrderIdParam, params *UpdatePaymentScheduleParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewUpdatePaymentScheduleRequestWithBody(creds Credentials, server string, orderId OrderIdParam, params *UpdatePaymentScheduleParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -2381,19 +2622,37 @@ func NewUpdatePaymentScheduleRequestWithBody(server string, orderId OrderIdParam
 }
 
 // NewUpdatePaymentTokenRequest calls the generic UpdatePaymentToken builder with application/json body
-func NewUpdatePaymentTokenRequest(server string, params *UpdatePaymentTokenParams, body UpdatePaymentTokenJSONRequestBody) (*http.Request, error) {
+func NewUpdatePaymentTokenRequest(creds Credentials, server string, params *UpdatePaymentTokenParams, body UpdatePaymentTokenJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewUpdatePaymentTokenRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewUpdatePaymentTokenRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewUpdatePaymentTokenRequestWithBody generates requests for UpdatePaymentToken with any type of body
-func NewUpdatePaymentTokenRequestWithBody(server string, params *UpdatePaymentTokenParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewUpdatePaymentTokenRequestWithBody(creds Credentials, server string, params *UpdatePaymentTokenParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -2490,19 +2749,37 @@ func NewUpdatePaymentTokenRequestWithBody(server string, params *UpdatePaymentTo
 }
 
 // NewCreatePaymentTokenRequest calls the generic CreatePaymentToken builder with application/json body
-func NewCreatePaymentTokenRequest(server string, params *CreatePaymentTokenParams, body CreatePaymentTokenJSONRequestBody) (*http.Request, error) {
+func NewCreatePaymentTokenRequest(creds Credentials, server string, params *CreatePaymentTokenParams, body CreatePaymentTokenJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewCreatePaymentTokenRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewCreatePaymentTokenRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewCreatePaymentTokenRequestWithBody generates requests for CreatePaymentToken with any type of body
-func NewCreatePaymentTokenRequestWithBody(server string, params *CreatePaymentTokenParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewCreatePaymentTokenRequestWithBody(creds Credentials, server string, params *CreatePaymentTokenParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -2599,8 +2876,15 @@ func NewCreatePaymentTokenRequestWithBody(server string, params *CreatePaymentTo
 }
 
 // NewDeletePaymentTokenRequest generates requests for DeletePaymentToken
-func NewDeletePaymentTokenRequest(server string, tokenId TokenIdParam, params *DeletePaymentTokenParams) (*http.Request, error) {
+func NewDeletePaymentTokenRequest(creds Credentials, server string, tokenId TokenIdParam, params *DeletePaymentTokenParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -2722,8 +3006,15 @@ func NewDeletePaymentTokenRequest(server string, tokenId TokenIdParam, params *D
 }
 
 // NewGetPaymentTokenDetailsRequest generates requests for GetPaymentTokenDetails
-func NewGetPaymentTokenDetailsRequest(server string, tokenId TokenIdParam, params *GetPaymentTokenDetailsParams) (*http.Request, error) {
+func NewGetPaymentTokenDetailsRequest(creds Credentials, server string, tokenId TokenIdParam, params *GetPaymentTokenDetailsParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -2845,8 +3136,15 @@ func NewGetPaymentTokenDetailsRequest(server string, tokenId TokenIdParam, param
 }
 
 // NewDeletePaymentUrlRequest generates requests for DeletePaymentUrl
-func NewDeletePaymentUrlRequest(server string, params *DeletePaymentUrlParams) (*http.Request, error) {
+func NewDeletePaymentUrlRequest(creds Credentials, server string, params *DeletePaymentUrlParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -3014,8 +3312,15 @@ func NewDeletePaymentUrlRequest(server string, params *DeletePaymentUrlParams) (
 }
 
 // NewPaymentUrlDetailRequest generates requests for PaymentUrlDetail
-func NewPaymentUrlDetailRequest(server string, params *PaymentUrlDetailParams) (*http.Request, error) {
+func NewPaymentUrlDetailRequest(creds Credentials, server string, params *PaymentUrlDetailParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -3191,19 +3496,37 @@ func NewPaymentUrlDetailRequest(server string, params *PaymentUrlDetailParams) (
 }
 
 // NewCreatePaymentUrlRequest calls the generic CreatePaymentUrl builder with application/json body
-func NewCreatePaymentUrlRequest(server string, params *CreatePaymentUrlParams, body CreatePaymentUrlJSONRequestBody) (*http.Request, error) {
+func NewCreatePaymentUrlRequest(creds Credentials, server string, params *CreatePaymentUrlParams, body CreatePaymentUrlJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewCreatePaymentUrlRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewCreatePaymentUrlRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewCreatePaymentUrlRequestWithBody generates requests for CreatePaymentUrl with any type of body
-func NewCreatePaymentUrlRequestWithBody(server string, params *CreatePaymentUrlParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewCreatePaymentUrlRequestWithBody(creds Credentials, server string, params *CreatePaymentUrlParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -3289,19 +3612,37 @@ func NewCreatePaymentUrlRequestWithBody(server string, params *CreatePaymentUrlP
 }
 
 // NewSubmitPrimaryTransactionRequest calls the generic SubmitPrimaryTransaction builder with application/json body
-func NewSubmitPrimaryTransactionRequest(server string, params *SubmitPrimaryTransactionParams, body SubmitPrimaryTransactionJSONRequestBody) (*http.Request, error) {
+func NewSubmitPrimaryTransactionRequest(creds Credentials, server string, params *SubmitPrimaryTransactionParams, body SubmitPrimaryTransactionJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewSubmitPrimaryTransactionRequestWithBody(server, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewSubmitPrimaryTransactionRequestWithBody(creds, server, params, "application/json", bodyReader)
 }
 
 // NewSubmitPrimaryTransactionRequestWithBody generates requests for SubmitPrimaryTransaction with any type of body
-func NewSubmitPrimaryTransactionRequestWithBody(server string, params *SubmitPrimaryTransactionParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewSubmitPrimaryTransactionRequestWithBody(creds Credentials, server string, params *SubmitPrimaryTransactionParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	queryUrl, err := url.Parse(server)
 	if err != nil {
@@ -3387,8 +3728,15 @@ func NewSubmitPrimaryTransactionRequestWithBody(server string, params *SubmitPri
 }
 
 // NewTransactionInquiryRequest generates requests for TransactionInquiry
-func NewTransactionInquiryRequest(server string, transactionId TransactionIdParam, params *TransactionInquiryParams) (*http.Request, error) {
+func NewTransactionInquiryRequest(creds Credentials, server string, transactionId TransactionIdParam, params *TransactionInquiryParams) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -3499,19 +3847,37 @@ func NewTransactionInquiryRequest(server string, transactionId TransactionIdPara
 }
 
 // NewFinalizeSecureTransactionRequest calls the generic FinalizeSecureTransaction builder with application/json body
-func NewFinalizeSecureTransactionRequest(server string, transactionId TransactionIdParam, params *FinalizeSecureTransactionParams, body FinalizeSecureTransactionJSONRequestBody) (*http.Request, error) {
+func NewFinalizeSecureTransactionRequest(creds Credentials, server string, transactionId TransactionIdParam, params *FinalizeSecureTransactionParams, body FinalizeSecureTransactionJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewFinalizeSecureTransactionRequestWithBody(server, transactionId, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewFinalizeSecureTransactionRequestWithBody(creds, server, transactionId, params, "application/json", bodyReader)
 }
 
 // NewFinalizeSecureTransactionRequestWithBody generates requests for FinalizeSecureTransaction with any type of body
-func NewFinalizeSecureTransactionRequestWithBody(server string, transactionId TransactionIdParam, params *FinalizeSecureTransactionParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewFinalizeSecureTransactionRequestWithBody(creds Credentials, server string, transactionId TransactionIdParam, params *FinalizeSecureTransactionParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -3604,19 +3970,37 @@ func NewFinalizeSecureTransactionRequestWithBody(server string, transactionId Tr
 }
 
 // NewSubmitSecondaryTransactionRequest calls the generic SubmitSecondaryTransaction builder with application/json body
-func NewSubmitSecondaryTransactionRequest(server string, transactionId TransactionIdParam, params *SubmitSecondaryTransactionParams, body SubmitSecondaryTransactionJSONRequestBody) (*http.Request, error) {
+func NewSubmitSecondaryTransactionRequest(creds Credentials, server string, transactionId TransactionIdParam, params *SubmitSecondaryTransactionParams, body SubmitSecondaryTransactionJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
+	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	bodyReader = bytes.NewReader(buf)
-	return NewSubmitSecondaryTransactionRequestWithBody(server, transactionId, params, "application/json", bodyReader)
+	bodyReader = bytes.NewBuffer(b)
+	return NewSubmitSecondaryTransactionRequestWithBody(creds, server, transactionId, params, "application/json", bodyReader)
 }
 
 // NewSubmitSecondaryTransactionRequestWithBody generates requests for SubmitSecondaryTransaction with any type of body
-func NewSubmitSecondaryTransactionRequestWithBody(server string, transactionId TransactionIdParam, params *SubmitSecondaryTransactionParams, contentType string, body io.Reader) (*http.Request, error) {
+func NewSubmitSecondaryTransactionRequestWithBody(creds Credentials, server string, transactionId TransactionIdParam, params *SubmitSecondaryTransactionParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
+	var bodyBytes []byte
+
+	switch t := body.(type) {
+	case *bytes.Buffer:
+		bodyBytes = t.Bytes()
+	default:
+		bodyBytes, err = ioutil.ReadAll(body)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	hdrs, err := creds.GenRequestHeaders(bodyBytes)
+	if err != nil {
+		return nil, err
+	}
+	params = params.WithHeaders(hdrs)
 
 	var pathParam0 string
 
@@ -3735,8 +4119,8 @@ type ClientWithResponses struct {
 
 // NewClientWithResponses creates a new ClientWithResponses, which wraps
 // Client with return type handling
-func NewClientWithResponses(server string, opts ...ClientOption) (*ClientWithResponses, error) {
-	client, err := NewClient(server, opts...)
+func NewClientWithResponses(server string, creds Credentials, opts ...ClientOption) (*ClientWithResponses, error) {
+	client, err := NewClient(server, creds, opts...)
 	if err != nil {
 		return nil, err
 	}

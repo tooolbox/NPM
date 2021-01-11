@@ -1,4 +1,4 @@
-package simple
+package fiserv
 
 import (
 	"crypto/hmac"
@@ -7,24 +7,23 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tooolbox/fiserv"
+	"github.com/gofrs/uuid"
 )
 
-const (
-	ProdHost    = "prod.api.firstdata.com/gateway/v2"
-	SandboxHost = "cert.api.firstdata.com/gateway/v2"
-
-	ProdEnvironment    = "production"
-	SandboxEnvironment = "sandbox"
-)
-
-type Config struct {
-	ApiKey      string
-	ApiSecret   string
-	Environment string
+type Credentials struct {
+	ApiKey    string
+	ApiSecret string
 }
 
-func (cfg Config) genHeaders(payload []byte, clientRequestId string, now time.Time) (*fiserv.HeaderData, error) {
+func (crd Credentials) GenRequestHeaders(payload []byte) (*HeaderData, error) {
+	clientRequestId, err := uuid.NewV4()
+	if err != nil {
+		return nil, err
+	}
+	return crd.genHeaders(payload, clientRequestId.String(), time.Now())
+}
+
+func (crd Credentials) genHeaders(payload []byte, clientRequestId string, now time.Time) (*HeaderData, error) {
 
 	// equivalent python code:
 	//
@@ -39,22 +38,22 @@ func (cfg Config) genHeaders(payload []byte, clientRequestId string, now time.Ti
 
 	msSinceEpoch := now.Unix() * 1000
 
-	toSign := []byte(cfg.ApiKey + clientRequestId + fmt.Sprintf("%d", msSinceEpoch))
+	toSign := []byte(crd.ApiKey + clientRequestId + fmt.Sprintf("%d", msSinceEpoch))
 	if len(payload) > 0 {
 		toSign = append(toSign, payload...)
 	}
 
-	sig, err := genMsgSignature(cfg.ApiSecret, toSign)
+	sig, err := genMsgSignature(crd.ApiSecret, toSign)
 	if err != nil {
 		return nil, err
 	}
 
-	return &fiserv.HeaderData{
-		ApiKey:           fiserv.ApiKeyParam(cfg.ApiKey),
-		ContentType:      fiserv.ContentTypeParam_application_json,
-		ClientRequestId:  fiserv.ClientRequestIdParam(clientRequestId),
-		Timestamp:        fiserv.TimestampParam(msSinceEpoch),
-		MessageSignature: fiserv.MessageSignatureParam(sig),
+	return &HeaderData{
+		ApiKey:           ApiKeyParam(crd.ApiKey),
+		ContentType:      ContentTypeParam_application_json,
+		ClientRequestId:  ClientRequestIdParam(clientRequestId),
+		Timestamp:        TimestampParam(msSinceEpoch),
+		MessageSignature: MessageSignatureParam(sig),
 	}, nil
 }
 

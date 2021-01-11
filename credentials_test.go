@@ -1,4 +1,4 @@
-package simple
+package fiserv
 
 import (
 	"testing"
@@ -21,12 +21,12 @@ func TestGenMsgSignature(t *testing.T) {
 }
 
 func TestGenHeaders(t *testing.T) {
-	cfg := Config{
+	creds := Credentials{
 		ApiKey:    "H1r5Zqnfg1Yh32FmvUU7rabZuapaw7B1",
 		ApiSecret: "5bAXQnRHT9bS8kdz",
 	}
 
-	hdrs, err := cfg.genHeaders(
+	hdrs, err := creds.genHeaders(
 		[]byte(`{"merchantTransactionId":"410cb84c-d6ca-418b-acbd-bfaab9fcce08","order":{},"requestType":"requestType","storeId":"987654321987","transactionAmount":{"components":{},"currency":"USD","total":132.45},"transactionOrigin":"ECOM"}
 `),
 		"e3413f75-140a-40da-a0ae-5fdc295ad73a",
@@ -36,7 +36,7 @@ func TestGenHeaders(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if string(hdrs.ApiKey) != cfg.ApiKey {
+	if string(hdrs.ApiKey) != creds.ApiKey {
 		t.Fatalf("Unexpected ApiKey value: %s", hdrs.ApiKey)
 	}
 
