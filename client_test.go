@@ -22,7 +22,7 @@ func TestClient(t *testing.T) {
 		Transport: &httpclientutil.DumpTransport{},
 	}
 
-	clnt, err := NewClient(SandboxServer, creds, WithHTTPClient(&httper))
+	clnt, err := NewClientWithResponses(SandboxServer, creds, WithHTTPClient(&httper))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,13 +46,20 @@ func TestClient(t *testing.T) {
   }
 }`
 
-	if _, err := clnt.SubmitPrimaryTransactionWithBody(
+	resp, err := clnt.SubmitPrimaryTransactionWithBodyWithResponse(
 		context.Background(),
 		&SubmitPrimaryTransactionParams{},
 		"application/json",
 		strings.NewReader(payload),
-	); err != nil {
+	)
+	if err != nil {
 		t.Fatal(err)
 	}
+
+	if resp.JSON200 == nil {
+		t.Fatalf("Unexpected status code: %d", resp.StatusCode())
+	}
+
+	t.Logf("Approved amount: %f", resp.JSON200.ApprovedAmount.Total)
 
 }
