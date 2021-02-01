@@ -7,6 +7,13 @@ import (
 	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 )
 
+// ACSResponse defines model for ACSResponse.
+type ACSResponse struct {
+
+	// The ACS response to the CReq message. It can indicate the result of cardholder authentication or, in the case of an app-based model, also signal that further cardholder interaction is required to complete the authentication.
+	CRes *string `json:"cRes,omitempty"`
+}
+
 // AVSResponse defines model for AVSResponse.
 type AVSResponse struct {
 
@@ -106,6 +113,45 @@ type AccountVerificationRequest struct {
 	StoreId *string `json:"storeId,omitempty"`
 }
 
+// AchCreditTransaction defines model for AchCreditTransaction.
+type AchCreditTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// ACH means automated clearing house. Contains properties common across TeleCheck message types. Abstract class, do not use this class directly, use one of its children.
+	PaymentMethod TeleCheckAchPaymentMethod `json:"paymentMethod"`
+}
+
+// AchPostAuthTransaction defines model for AchPostAuthTransaction.
+type AchPostAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Amount of the transaction.
+	TransactionAmount Amount `json:"transactionAmount"`
+}
+
+// AchPreAuthTransaction defines model for AchPreAuthTransaction.
+type AchPreAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// ACH means automated clearing house. Contains properties common across TeleCheck message types. Abstract class, do not use this class directly, use one of its children.
+	PaymentMethod TeleCheckAchPaymentMethod `json:"paymentMethod"`
+}
+
+// AchRecurringType defines model for AchRecurringType.
+type AchRecurringType string
+
+// List of AchRecurringType
+const (
+	AchRecurringType_Recurring AchRecurringType = "Recurring"
+	AchRecurringType_Single    AchRecurringType = "Single"
+)
+
 // AchResponse defines model for AchResponse.
 type AchResponse struct {
 
@@ -123,6 +169,36 @@ type AchResponse struct {
 
 	// Indicates the result of the requested authorization and is returned in the sale response.
 	TransactionStatus *string `json:"transactionStatus,omitempty"`
+}
+
+// AchReturnTransaction defines model for AchReturnTransaction.
+type AchReturnTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Amount of the transaction.
+	TransactionAmount Amount `json:"transactionAmount"`
+}
+
+// AchSaleTransaction defines model for AchSaleTransaction.
+type AchSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// ACH means automated clearing house. Contains properties common across TeleCheck message types. Abstract class, do not use this class directly, use one of its children.
+	PaymentMethod TeleCheckAchPaymentMethod `json:"paymentMethod"`
+}
+
+// AchVoidTransaction defines model for AchVoidTransaction.
+type AchVoidTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Amount of the transaction.
+	TransactionAmount Amount `json:"transactionAmount"`
 }
 
 // AdditionalAmountRate defines model for AdditionalAmountRate.
@@ -294,6 +370,42 @@ type Airline struct {
 	} `json:"travelRoute,omitempty"`
 }
 
+// AliPay defines model for AliPay.
+type AliPay struct {
+
+	// Use this to send order details that show up in the statement.
+	OrderDetails string `json:"orderDetails"`
+
+	// Use this to send an order title that shows up in the statement.
+	OrderTitle string `json:"orderTitle"`
+
+	// Use this to send payment-related information, such as customer identity ID.
+	PaymentData string `json:"paymentData"`
+
+	// Use this to indicate the type of machine-readable payment data for scanning.
+	PaymentDataType string `json:"paymentDataType"`
+}
+
+// AliPayPaymentMethod defines model for AliPayPaymentMethod.
+type AliPayPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// The payment object for AliPay transactions. Use this to populate AliPay payment method details.
+	AliPay AliPay `json:"aliPay"`
+}
+
+// AliPaySaleTransaction defines model for AliPaySaleTransaction.
+type AliPaySaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing AliPay information.
+	PaymentMethod AliPayPaymentMethod `json:"paymentMethod"`
+}
+
 // Amount defines model for Amount.
 type Amount struct {
 
@@ -329,6 +441,20 @@ type AmountComponents struct {
 	VatAmount *float32 `json:"vatAmount,omitempty"`
 }
 
+// AuthenticationRequest defines model for AuthenticationRequest.
+type AuthenticationRequest struct {
+
+	// Indicates what kind of authentication scheme the merchant wants to use on the card.
+	AuthenticationType string `json:"authenticationType"`
+}
+
+// AuthenticationResult defines model for AuthenticationResult.
+type AuthenticationResult struct {
+
+	// Specifies the version of 3DS to be used where authentication was managed outside of the gateway.
+	AuthenticationType string `json:"authenticationType"`
+}
+
 // AuthenticationUpdateRequest defines model for AuthenticationUpdateRequest.
 type AuthenticationUpdateRequest struct {
 
@@ -340,6 +466,21 @@ type AuthenticationUpdateRequest struct {
 
 	// An optional Outlet ID for clients that support multiple stores in the same developer app.
 	StoreId *string `json:"storeId,omitempty"`
+}
+
+// Background defines model for Background.
+type Background struct {
+	Body    *Body    `json:"body,omitempty"`
+	Borders *Borders `json:"borders,omitempty"`
+	Content *Content `json:"content,omitempty"`
+	TopBar  *TopBar  `json:"topBar,omitempty"`
+}
+
+// BackgroundColor defines model for BackgroundColor.
+type BackgroundColor struct {
+	Content *Content `json:"content,omitempty"`
+	Footer  *Footer  `json:"footer,omitempty"`
+	Header  *Header  `json:"header,omitempty"`
 }
 
 // BancontactQR defines model for BancontactQR.
@@ -416,6 +557,115 @@ type BillingAddress struct {
 
 	// Postal code.
 	ZipPostalCode *string `json:"zipPostalCode,omitempty"`
+}
+
+// BlockCard defines model for BlockCard.
+type BlockCard struct {
+
+	// Use this field to send clear PAN or tokens other than TransArmor Token.
+	CardNumber *string `json:"cardNumber,omitempty"`
+
+	// The unique merchant transaction ID.
+	MerchantTransactionId *string `json:"merchantTransactionId,omitempty"`
+
+	// Client order ID.
+	OrderId *string `json:"orderId,omitempty"`
+}
+
+// BlockDomain defines model for BlockDomain.
+type BlockDomain struct {
+
+	// Use this field to send domain name to be blocked.
+	Domain *string `json:"domain,omitempty"`
+}
+
+// BlockIPAddress defines model for BlockIPAddress.
+type BlockIPAddress struct {
+
+	// Use this field to send IP address to be blocked.
+	IpAddress *string `json:"ipAddress,omitempty"`
+
+	// Client order ID.
+	OrderId *string `json:"orderId,omitempty"`
+}
+
+// BlockName defines model for BlockName.
+type BlockName struct {
+
+	// Use this field to send name to be blocked.
+	Name *string `json:"name,omitempty"`
+
+	// Client order ID.
+	OrderId *string `json:"orderId,omitempty"`
+}
+
+// BlockedCardNumber defines model for BlockedCardNumber.
+type BlockedCardNumber struct {
+
+	// Use this field to send clear PAN or tokens other than TransArmor Token.
+	CardNumber *string `json:"cardNumber,omitempty"`
+
+	// Token identifier.
+	TokenIdentifier *string `json:"tokenIdentifier,omitempty"`
+}
+
+// BlockedItems defines model for BlockedItems.
+type BlockedItems struct {
+
+	// Object that holds information about card that should be blocked.
+	BlockCard *BlockCard `json:"blockCard,omitempty"`
+
+	// Object that holds information about domain that should be blocked.
+	BlockDomain *BlockDomain `json:"blockDomain,omitempty"`
+
+	// Object that holds information about IP address that should be blocked.
+	BlockIPAddress *BlockIPAddress `json:"blockIPAddress,omitempty"`
+
+	// Object that holds information about name that should be blocked.
+	BlockName *BlockName `json:"blockName,omitempty"`
+}
+
+// Body defines model for Body.
+type Body struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+}
+
+// Borders defines model for Borders.
+type Borders struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+}
+
+// BrandingStyleConfigurationRequest defines model for BrandingStyleConfigurationRequest.
+type BrandingStyleConfigurationRequest struct {
+	Stores *[]StoreBrandingStyleConfiguration `json:"stores,omitempty"`
+}
+
+// BrandingStyleConfigurationResponse defines model for BrandingStyleConfigurationResponse.
+type BrandingStyleConfigurationResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+	Stores *[]BrandingStyleConfigurationResult `json:"stores,omitempty"`
+}
+
+// BrandingStyleConfigurationResult defines model for BrandingStyleConfigurationResult.
+type BrandingStyleConfigurationResult struct {
+
+	// An optional outlet id for clients that support multiple stores in the same developer app.
+	Id *string `json:"id,omitempty"`
+
+	// Status from branding style configuration process.
+	Status *string `json:"status,omitempty"`
+}
+
+// Button defines model for Button.
+type Button struct {
+	Hover   *Hover   `json:"hover,omitempty"`
+	Primary *Primary `json:"primary,omitempty"`
 }
 
 // CarRental defines model for CarRental.
@@ -548,6 +798,124 @@ type CardVerificationRequest struct {
 	StoreId *string `json:"storeId,omitempty"`
 }
 
+// ChinaDomestic defines model for ChinaDomestic.
+type ChinaDomestic struct {
+
+	// Use this to indicate the CUP bank ID if known.
+	BankId *string `json:"bankId,omitempty"`
+
+	// Use this to indicate the CUP customer ID if known.
+	CustomerId *string `json:"customerId,omitempty"`
+
+	// Use this to limit card functions to debit cards.
+	LimitCardFunctionToDebit *bool `json:"limitCardFunctionToDebit,omitempty"`
+
+	// Use this as unique identifier of WeChat user which is corresponded to the appid of merchant. The field is only applicable for ChinaDomesticPaymentMethod - brand = WECHAT_DOMESTIC
+	OpenId *string `json:"openId,omitempty"`
+
+	// Use this to indicate the product code according to the product category list.
+	ProductCode string `json:"productCode"`
+
+	// The product description.
+	ProductDescription string `json:"productDescription"`
+
+	// Rate amount in 3 decimal 12 bytes total digit.
+	ProductPrice float32 `json:"productPrice"`
+
+	// The quantity.
+	ProductQuantity int `json:"productQuantity"`
+
+	// Use this to indicate the product code according to the product category list.
+	RedirectURL string `json:"redirectURL"`
+}
+
+// ChinaDomesticPaymentMethod defines model for ChinaDomesticPaymentMethod.
+type ChinaDomesticPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+	Brand string `json:"brand"`
+
+	// The payment object for China-domestic transactions. Use this to populate all china domestic payment method details.
+	ChinaDomestic ChinaDomestic `json:"chinaDomestic"`
+}
+
+// ChinaPnRSaleTransaction defines model for ChinaPnRSaleTransaction.
+type ChinaPnRSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing China Domestic information.
+	PaymentMethod ChinaDomesticPaymentMethod `json:"paymentMethod"`
+}
+
+// ClassicMode defines model for ClassicMode.
+type ClassicMode struct {
+
+	// Object contains font properties.
+	AmountTitle *FontProperties `json:"amountTitle,omitempty"`
+
+	// Object contains font and color properties.
+	Anchor *Properties `json:"anchor,omitempty"`
+
+	// Object contains background color properties.
+	BackgroundColor *BackgroundColor `json:"backgroundColor,omitempty"`
+
+	// Object contains font and color properties.
+	Buttons *Properties `json:"buttons,omitempty"`
+
+	// Object contains font properties.
+	IndividualText *FontProperties `json:"individualText,omitempty"`
+
+	// Object contains font properties.
+	Label *FontProperties `json:"label,omitempty"`
+
+	// Object contains configurable style properties for mobile.
+	Mobile *Mobile `json:"mobile,omitempty"`
+
+	// Object contains font properties.
+	NormalText *FontProperties `json:"normalText,omitempty"`
+
+	// Object contains font properties.
+	Superscription *FontProperties `json:"superscription,omitempty"`
+
+	// Object contains font and color properties.
+	SystemMessages *Properties `json:"systemMessages,omitempty"`
+}
+
+// ClearingDetails defines model for ClearingDetails.
+type ClearingDetails struct {
+
+	// Timestamp when the clearing has been processed. The used format is "YYYYMMDDhhmmss".
+	BatchTimeStamp *string `json:"batchTimeStamp,omitempty"`
+
+	// The array contains information about the clearing elements.
+	ClearingElements *[]ClearingElement `json:"clearingElements,omitempty"`
+
+	// Start receipt number for the clearing process.
+	ReceiptNumberFrom *int32 `json:"receiptNumberFrom,omitempty"`
+
+	// End receipt number for the clearing process.
+	ReceiptNumberTo *int32 `json:"receiptNumberTo,omitempty"`
+
+	// Trace number for the clearing process.
+	TraceNumber *int32 `json:"traceNumber,omitempty"`
+}
+
+// ClearingElement defines model for ClearingElement.
+type ClearingElement struct {
+
+	// Contains the brand of the card.
+	Brand *string `json:"brand,omitempty"`
+
+	// Specifies the amount of clearing elements for a given brand.
+	Count *int32 `json:"count,omitempty"`
+
+	// Holds the total clearing value computed for a specific brand.
+	Value *int64 `json:"value,omitempty"`
+}
+
 // ClientLocale defines model for ClientLocale.
 type ClientLocale struct {
 
@@ -568,6 +936,34 @@ type ClientRegistration struct {
 	OriginalTransactionType *string `json:"originalTransactionType,omitempty"`
 }
 
+// Color defines model for Color.
+type Color string
+
+// CombinedMode defines model for CombinedMode.
+type CombinedMode struct {
+
+	// Object contains background style properties.
+	Background *Background `json:"background,omitempty"`
+
+	// Object contains button style properties.
+	Button *Button `json:"button,omitempty"`
+
+	// Object contains logo data.
+	Logo *Logo `json:"logo,omitempty"`
+
+	// Object contains text style properties.
+	Text *Text `json:"text,omitempty"`
+}
+
+// ConnectMode defines model for ConnectMode.
+type ConnectMode string
+
+// List of ConnectMode
+const (
+	ConnectMode_Classic  ConnectMode = "Classic"
+	ConnectMode_Combined ConnectMode = "Combined"
+)
+
 // Contact defines model for Contact.
 type Contact struct {
 
@@ -584,6 +980,20 @@ type Contact struct {
 	Phone *string `json:"phone,omitempty"`
 }
 
+// Content defines model for Content.
+type Content struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+}
+
+// CountryProfile defines model for CountryProfile.
+type CountryProfile struct {
+
+	// Country profile.
+	Profile *int `json:"profile,omitempty"`
+}
+
 // CreatePaymentToken defines model for CreatePaymentToken.
 type CreatePaymentToken struct {
 
@@ -595,6 +1005,16 @@ type CreatePaymentToken struct {
 
 	// Client-supplied payment token value. Only applicable for DataVault tokenization scheme.
 	Value *string `json:"value,omitempty"`
+}
+
+// CurrencyConversion defines model for CurrencyConversion.
+type CurrencyConversion struct {
+
+	// Type of currency conversion.
+	ConversionType string `json:"conversionType"`
+
+	// Inquiry rate id.
+	InquiryRateId string `json:"inquiryRateId"`
 }
 
 // CurrencyConversionResponse defines model for CurrencyConversionResponse.
@@ -657,6 +1077,141 @@ type CustomerAddress struct {
 	Phone *Phone `json:"phone,omitempty"`
 }
 
+// DCCExchangeRateRequest defines model for DCCExchangeRateRequest.
+type DCCExchangeRateRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/ExchangeRateRequest)
+	ExchangeRateRequest
+	// Embedded fields due to inline allOf schema
+
+	// The bank identification number (BIN) of the card to be used for DCC. The BIN is the first 6-9 digits of the card number.
+	Bin string `json:"bin"`
+}
+
+// Dcc defines model for Dcc.
+type Dcc struct {
+	// Embedded struct due to allOf(#/components/schemas/CurrencyConversion)
+	CurrencyConversion
+	// Embedded fields due to inline allOf schema
+
+	// Indicates whether customer agrees with rate to be used.
+	DccApplied bool `json:"dccApplied"`
+}
+
+// DecrementalPreAuthFlag defines model for DecrementalPreAuthFlag.
+type DecrementalPreAuthFlag bool
+
+// DecryptedApplePay defines model for DecryptedApplePay.
+type DecryptedApplePay struct {
+
+	// Payment card number.
+	AccountNumber string `json:"accountNumber"`
+
+	// Card brand.
+	Brand *string `json:"brand,omitempty"`
+
+	// Name of the cardholder.
+	CardholderName *string `json:"cardholderName,omitempty"`
+
+	// The wallet cryptogram from the decrypted data.
+	Cryptogram string `json:"cryptogram"`
+
+	// The ECI indicator from the decrypted data.
+	EciIndicator string `json:"eciIndicator"`
+
+	// Card expiration date in MMYYYY format.
+	Expiration string `json:"expiration"`
+}
+
+// DecryptedApplePayWalletPaymentMethod defines model for DecryptedApplePayWalletPaymentMethod.
+type DecryptedApplePayWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Decrypted Apple Pay payload.
+	DecryptedApplePay DecryptedApplePay `json:"decryptedApplePay"`
+}
+
+// DecryptedGooglePay defines model for DecryptedGooglePay.
+type DecryptedGooglePay struct {
+
+	// Payment card number.
+	AccountNumber string `json:"accountNumber"`
+
+	// Card brand.
+	Brand *string `json:"brand,omitempty"`
+
+	// Name of the cardholder.
+	CardholderName *string `json:"cardholderName,omitempty"`
+
+	// The wallet cryptogram from the decrypted data.
+	Cryptogram string `json:"cryptogram"`
+
+	// The ECI indicator from the decrypted data.
+	EciIndicator string `json:"eciIndicator"`
+
+	// Card expiration date in MMYYYY format.
+	Expiration string `json:"expiration"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// DecryptedGooglePayWalletPaymentMethod defines model for DecryptedGooglePayWalletPaymentMethod.
+type DecryptedGooglePayWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Decrypted Google Pay payload.
+	DecryptedGooglePay DecryptedGooglePay `json:"decryptedGooglePay"`
+}
+
+// DecryptedSamsungPay defines model for DecryptedSamsungPay.
+type DecryptedSamsungPay struct {
+
+	// Payment card number.
+	AccountNumber string `json:"accountNumber"`
+
+	// Card brand.
+	Brand *string `json:"brand,omitempty"`
+
+	// Name of the cardholder.
+	CardholderName *string `json:"cardholderName,omitempty"`
+
+	// The wallet cryptogram from the decrypted data.
+	Cryptogram string `json:"cryptogram"`
+
+	// The ECI indicator from the decrypted data.
+	EciIndicator string `json:"eciIndicator"`
+
+	// Card expiration date in MMYYYY format.
+	Expiration string `json:"expiration"`
+}
+
+// DecryptedSamsungPayWalletPaymentMethod defines model for DecryptedSamsungPayWalletPaymentMethod.
+type DecryptedSamsungPayWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Decrypted Samsung Pay payload.
+	DecryptedSamsungPay DecryptedSamsungPay `json:"decryptedSamsungPay"`
+}
+
+// DeleteBrandingStyleConfigurationResponse defines model for DeleteBrandingStyleConfigurationResponse.
+type DeleteBrandingStyleConfigurationResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+
+	// Status from delete branding style configuration process.
+	Status *string `json:"status,omitempty"`
+
+	// Store ID number.
+	StoreId *string `json:"storeId,omitempty"`
+}
+
 // Device defines model for Device.
 type Device struct {
 
@@ -695,6 +1250,189 @@ type Device struct {
 
 	// A JSON object that can carry any additional information about the device that might be helpful for fraud detection.
 	UserDefined *map[string]interface{} `json:"userDefined,omitempty"`
+}
+
+// Disbursement defines model for Disbursement.
+type Disbursement struct {
+
+	// The type of disbursement.
+	DisbursementType string `json:"disbursementType"`
+
+	// Receiver information for a funding transaction.
+	ReceiverInfo ReceiverInfo `json:"receiverInfo"`
+
+	// Sender information for a disbursement transaction.
+	SenderInfo SenderInfo `json:"senderInfo"`
+}
+
+// DisbursementTransactionType defines model for DisbursementTransactionType.
+type DisbursementTransactionType struct {
+	// Embedded struct due to allOf(#/components/schemas/Disbursement)
+	Disbursement
+	// Embedded fields due to inline allOf schema
+}
+
+// Document defines model for Document.
+type Document struct {
+
+	// Document number.
+	Number string `json:"number"`
+
+	// Document type.
+	Type string `json:"type"`
+}
+
+// DynamicPricing defines model for DynamicPricing.
+type DynamicPricing struct {
+	// Embedded struct due to allOf(#/components/schemas/CurrencyConversion)
+	CurrencyConversion
+	// Embedded fields due to inline allOf schema
+
+	// Foreign amount.
+	ForeignAmount string `json:"foreignAmount"`
+
+	// The currency code to convert for dynamic pricing in ISO 4217 currency code format.
+	ForeignCurrency string `json:"foreignCurrency"`
+}
+
+// DynamicPricingExchangeRateRequest defines model for DynamicPricingExchangeRateRequest.
+type DynamicPricingExchangeRateRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/ExchangeRateRequest)
+	ExchangeRateRequest
+	// Embedded fields due to inline allOf schema
+
+	// The currency code to convert for dynamic pricing in either numeric or alphabetic ISO 4217 currency code format.
+	ForeignCurrency string `json:"foreignCurrency"`
+}
+
+// EmailNotificationData defines model for EmailNotificationData.
+type EmailNotificationData struct {
+
+	// Use this to enable/disable email notifications.
+	EnableNotification *bool `json:"enableNotification,omitempty"`
+
+	// The locale for received notifications.
+	Locale *string `json:"locale,omitempty"`
+
+	// The merchant name to be displayed in the email to customer.
+	MerchantName *string `json:"merchantName,omitempty"`
+
+	// The email address(es) for receiving transaction notifications.
+	ReceiverEmail *string `json:"receiverEmail,omitempty"`
+
+	// The email address for sending transaction notifications to customer.
+	SenderEmail *string `json:"senderEmail,omitempty"`
+}
+
+// EncryptedApplePay defines model for EncryptedApplePay.
+type EncryptedApplePay struct {
+
+	// Base64-encoded value of PKPaymentRequest. Required only if applicationDataHash is present.
+	ApplicationData *string `json:"applicationData,omitempty"`
+
+	// The encrypted wallet payload.
+	Data string `json:"data"`
+
+	// Additional version-dependent information used to decrypt and verify the payment.
+	Header struct {
+
+		// Merchant supplied information about the payment request. Contains Base64-encoded SHA256 hash of the applicationData property of the original PKPaymentRequest. Note - applicationData from PaymentData of PKPaymentToken Refer to Apple Pay documentation.
+		ApplicationDataHash *string `json:"applicationDataHash,omitempty"`
+
+		// Temporary key for generating shared secret from a device.
+		EphemeralPublicKey string `json:"ephemeralPublicKey"`
+
+		// Hash of the X.509 encoded public key bytes of the merchant’s certificate.
+		PublicKeyHash string `json:"publicKeyHash"`
+
+		// Transaction identifier, generated on the device.
+		TransactionId string `json:"transactionId"`
+	} `json:"header"`
+
+	// The merchant ID assigned by the wallet provider.
+	MerchantId string `json:"merchantId"`
+
+	// Signature of the payment and header data.
+	Signature string `json:"signature"`
+
+	// Version information about the payment token.
+	Version *string `json:"version,omitempty"`
+}
+
+// EncryptedApplePayWalletPaymentMethod defines model for EncryptedApplePayWalletPaymentMethod.
+type EncryptedApplePayWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Encrypted Apple Pay payload.
+	EncryptedApplePay EncryptedApplePay `json:"encryptedApplePay"`
+}
+
+// EncryptedGooglePay defines model for EncryptedGooglePay.
+type EncryptedGooglePay struct {
+
+	// The encrypted wallet payload.
+	Data struct {
+
+		// The encrypted message containing the actual payment information as well as additional security fields.
+		EncryptedMessage string `json:"encryptedMessage"`
+
+		// The ephemeral public key associated with the private key to encrypt the message in uncompressed point format.
+		EphemeralPublicKey string `json:"ephemeralPublicKey"`
+
+		// MAC of the encryptedMessage.
+		Tag string `json:"tag"`
+	} `json:"data"`
+
+	// Signature for verifying that the message comes from Google. The signature is created using ECDSA.
+	Signature string `json:"signature"`
+
+	// Identifies under which encryption/signing scheme this message has been created. In this way, the protocol can evolve over time if needed. For Google Payments transactions, this should be set to ECv1.
+	Version string `json:"version"`
+}
+
+// EncryptedGooglePayWalletPaymentMethod defines model for EncryptedGooglePayWalletPaymentMethod.
+type EncryptedGooglePayWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Encrypted Google Pay payload.
+	EncryptedGooglePay EncryptedGooglePay `json:"encryptedGooglePay"`
+}
+
+// EncryptedSamsungPay defines model for EncryptedSamsungPay.
+type EncryptedSamsungPay struct {
+
+	// The encrypted wallet payload.
+	Data string `json:"data"`
+
+	// Identifies under which encryption/signing scheme this message has been created. In this way, the protocol can evolve over time if needed. For Google Payments transactions, this should be set to ECv1.
+	Version *string `json:"version,omitempty"`
+}
+
+// EncryptedSamsungPayWalletPaymentMethod defines model for EncryptedSamsungPayWalletPaymentMethod.
+type EncryptedSamsungPayWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Encrypted Samsung Pay payload.
+	EncryptedSamsungPay EncryptedSamsungPay `json:"encryptedSamsungPay"`
+}
+
+// EndpointResponse defines model for EndpointResponse.
+type EndpointResponse struct {
+
+	// Defines the batch number of an endpoint clearing process.
+	BatchNumber *string `json:"batchNumber,omitempty"`
+
+	// Specifies the identifier of an endpoint.
+	EndpointID *string `json:"endpointID,omitempty"`
+
+	// Defines the clearing status of an endpoint.
+	Status *string `json:"status,omitempty"`
 }
 
 // Error defines model for Error.
@@ -805,6 +1543,53 @@ type Expiration struct {
 
 	// Year of the card expiration date in YY format.
 	Year string `json:"year"`
+}
+
+// FontFace defines model for FontFace.
+type FontFace string
+
+// List of FontFace
+const (
+	FontFace_arial           FontFace = "arial"
+	FontFace_courier_new     FontFace = "courier new"
+	FontFace_times_new_roman FontFace = "times new roman"
+	FontFace_trebuchet_ms    FontFace = "trebuchet ms"
+	FontFace_verdana         FontFace = "verdana"
+)
+
+// FontProperties defines model for FontProperties.
+type FontProperties struct {
+
+	// Hexadecimal color value.
+	FontColor *Color `json:"fontColor,omitempty"`
+
+	// Font face property.
+	FontFace *FontFace `json:"fontFace,omitempty"`
+
+	// Font size property.
+	FontSize *FontSize `json:"fontSize,omitempty"`
+
+	// Font weight property.
+	FontWeight *FontWeight `json:"fontWeight,omitempty"`
+}
+
+// FontSize defines model for FontSize.
+type FontSize string
+
+// FontWeight defines model for FontWeight.
+type FontWeight string
+
+// List of FontWeight
+const (
+	FontWeight_bold   FontWeight = "bold"
+	FontWeight_normal FontWeight = "normal"
+)
+
+// Footer defines model for Footer.
+type Footer struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
 }
 
 // FraudAddress defines model for FraudAddress.
@@ -1035,6 +1820,51 @@ type FraudScoreExplanation []struct {
 	Type *string `json:"type,omitempty"`
 }
 
+// FraudSettings defines model for FraudSettings.
+type FraudSettings struct {
+
+	// Object that holds information about items that should be blocked.
+	BlockedItems *BlockedItems `json:"blockedItems,omitempty"`
+
+	// Object that holds information about country.
+	CountryProfile *CountryProfile `json:"countryProfile,omitempty"`
+
+	// Object that holds information about lockout times.
+	LockoutTime           *LockoutTime             `json:"lockoutTime,omitempty"`
+	MaximumPurchaseAmount *[]MaximumPurchaseAmount `json:"maximumPurchaseAmount,omitempty"`
+}
+
+// FraudSettingsResponse defines model for FraudSettingsResponse.
+type FraudSettingsResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+
+	// List of blocked card numbers.
+	BlockedCardNumbers *[]BlockedCardNumber `json:"blockedCardNumbers,omitempty"`
+
+	// List of blocked fraud domain names.
+	BlockedDomainNames *[]string `json:"blockedDomainNames,omitempty"`
+
+	// List of blocked fraud IP address/Class C.
+	BlockedIpOrClassCAddresses *[]string `json:"blockedIpOrClassCAddresses,omitempty"`
+
+	// List of blocked fraud names.
+	BlockedNames *[]string `json:"blockedNames,omitempty"`
+
+	// Country profile.
+	CountryProfile *string `json:"countryProfile,omitempty"`
+
+	// Object that holds information about lockout times.
+	LockoutTime *LockoutTime `json:"lockoutTime,omitempty"`
+
+	// Maximum purchase amount limit.
+	MaximumPurchaseAmount *[]MaximumPurchaseAmount `json:"maximumPurchaseAmount,omitempty"`
+
+	// The outlet ID.
+	StoreId *string `json:"storeId,omitempty"`
+}
+
 // Frequency defines model for Frequency.
 type Frequency struct {
 
@@ -1043,6 +1873,37 @@ type Frequency struct {
 
 	// Unit which defines the frequency.
 	Unit string `json:"unit"`
+}
+
+// FundingTransactionType defines model for FundingTransactionType.
+type FundingTransactionType struct {
+	// Embedded struct due to allOf(#/components/schemas/Disbursement)
+	Disbursement
+	// Embedded fields due to inline allOf schema
+}
+
+// Header defines model for Header.
+type Header struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+}
+
+// Hover defines model for Hover.
+type Hover struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+}
+
+// IdInfo defines model for IdInfo.
+type IdInfo struct {
+
+	// Identification data.
+	IdData *string `json:"idData,omitempty"`
+
+	// Identification type.
+	IdType *string `json:"idType,omitempty"`
 }
 
 // IndustrySpecificExtensions defines model for IndustrySpecificExtensions.
@@ -1059,6 +1920,22 @@ type IndustrySpecificExtensions struct {
 
 	// The group MCC (Merchant Category Code) 6012
 	Mcc6012 *Mcc6012 `json:"mcc6012,omitempty"`
+}
+
+// InitiateClearingResponse defines model for InitiateClearingResponse.
+type InitiateClearingResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+
+	// Contains clearing related response information.
+	ClearingDetails *ClearingDetails `json:"clearingDetails,omitempty"`
+
+	// The array holds response information of the involved endpoints.
+	EndpointResponses *[]EndpointResponse `json:"endpointResponses,omitempty"`
+
+	// Request status. If it is anything other than 'SUCCESS', please refer to 400s HTTP error codes or decline. See Error object for details.
+	RequestStatus *string `json:"requestStatus,omitempty"`
 }
 
 // InstallmentOptions defines model for InstallmentOptions.
@@ -1158,6 +2035,16 @@ type Location struct {
 	UserDefined *map[string]interface{} `json:"userDefined,omitempty"`
 }
 
+// LockoutTime defines model for LockoutTime.
+type LockoutTime struct {
+
+	// Auto-lockout time.
+	AutoLockoutTime *int `json:"autoLockoutTime,omitempty"`
+
+	// Duplicate lockout time.
+	DuplicateLockoutTime *int `json:"duplicateLockoutTime,omitempty"`
+}
+
 // Lodging defines model for Lodging.
 type Lodging struct {
 
@@ -1179,6 +2066,19 @@ type Lodging struct {
 	NoShowIndicator *bool `json:"noShowIndicator,omitempty"`
 }
 
+// Logo defines model for Logo.
+type Logo struct {
+
+	// Base64 image data.
+	Data []byte `json:"data"`
+
+	// The filename of the uploaded logo.
+	Filename string `json:"filename"`
+
+	// Define position of logo.
+	Position string `json:"position"`
+}
+
 // Loyalty defines model for Loyalty.
 type Loyalty struct {
 
@@ -1190,6 +2090,29 @@ type Loyalty struct {
 
 	// A string that identifies the program in which the customer is enrolled if the merchant supports several programs or levels.
 	Program *string `json:"program,omitempty"`
+}
+
+// MasterpassWalletPaymentMethod defines model for MasterpassWalletPaymentMethod.
+type MasterpassWalletPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/WalletPaymentMethod)
+	WalletPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Payment card model.
+	PaymentCard PaymentCard `json:"paymentCard"`
+
+	// Masterpass Wallet ID.
+	WalletId string `json:"walletId"`
+}
+
+// MaximumPurchaseAmount defines model for MaximumPurchaseAmount.
+type MaximumPurchaseAmount struct {
+
+	// Currency in alphabetic ISO 4217 currency code format.
+	Currency string `json:"currency"`
+
+	// Maximum purchase amount limit.
+	MaxAmount string `json:"maxAmount"`
 }
 
 // Mcc6012 defines model for Mcc6012.
@@ -1252,6 +2175,18 @@ type Method struct {
 	UserDefined *map[string]interface{} `json:"userDefined,omitempty"`
 }
 
+// Mobile defines model for Mobile.
+type Mobile struct {
+	HeaderArea *struct {
+
+		// Hexadecimal color value.
+		Color *Color `json:"color,omitempty"`
+	} `json:"headerArea,omitempty"`
+
+	// check if logo should be shown
+	ShowLogo *bool `json:"showLogo,omitempty"`
+}
+
 // Order defines model for Order.
 type Order struct {
 
@@ -1283,6 +2218,16 @@ type Order struct {
 	SoftDescriptor *SoftDescriptor `json:"softDescriptor,omitempty"`
 }
 
+// OrderErrorResponse defines model for OrderErrorResponse.
+type OrderErrorResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/OrderResponse)
+	OrderResponse
+	// Embedded fields due to inline allOf schema
+
+	// Error information.
+	Error *Error `json:"error,omitempty"`
+}
+
 // OrderResponse defines model for OrderResponse.
 type OrderResponse struct {
 	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
@@ -1303,6 +2248,23 @@ type OrderResponse struct {
 
 	// Required for some payment methods (for example, Klarna).
 	Transactions *[]TransactionResponse `json:"transactions,omitempty"`
+}
+
+// PayPal defines model for PayPal.
+type PayPal struct {
+
+	// Email address of the recipient.
+	RecipientEmail string `json:"recipientEmail"`
+}
+
+// PayPalPaymentMethod defines model for PayPalPaymentMethod.
+type PayPalPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// The payment object for PayPal transactions.
+	PayPal PayPal `json:"payPal"`
 }
 
 // Payment defines model for Payment.
@@ -1370,6 +2332,87 @@ type PaymentCard struct {
 	SecurityCode *string `json:"securityCode,omitempty"`
 }
 
+// PaymentCardCreditTransaction defines model for PaymentCardCreditTransaction.
+type PaymentCardCreditTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Currency conversion. Abstract class, do not use this class directly, use one of its children: Dcc, DynamicPricing.
+	CurrencyConversion *CurrencyConversion `json:"currencyConversion,omitempty"`
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
+}
+
+// PaymentCardDisbursementTransaction defines model for PaymentCardDisbursementTransaction.
+type PaymentCardDisbursementTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Use this model to create a payment token.
+	CreateToken *CreatePaymentToken `json:"createToken,omitempty"`
+
+	// Disbursement information. Abstract class, do not use this class directly, use one of its children: FundingTransactionType, DisbursementTransactionType.
+	Disbursement Disbursement `json:"disbursement"`
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentCardForcedTicketTransaction defines model for PaymentCardForcedTicketTransaction.
+type PaymentCardForcedTicketTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
+
+	// Stores the six-digit reference number you have received as the result of a successful external authorization (e.g. by phone). The gateway needs this number for uniquely mapping a ForcedTicket transaction to a previously performed external authorization.
+	ReferenceNumber string `json:"referenceNumber"`
+}
+
+// PaymentCardInfoLookupRequest defines model for PaymentCardInfoLookupRequest.
+type PaymentCardInfoLookupRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AccountInfoLookupRequest)
+	AccountInfoLookupRequest
+	// Embedded fields due to inline allOf schema
+
+	// Payment card model.
+	PaymentCard PaymentCard `json:"paymentCard"`
+}
+
+// PaymentCardPayerAuthTransaction defines model for PaymentCardPayerAuthTransaction.
+type PaymentCardPayerAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Currency conversion. Abstract class, do not use this class directly, use one of its children: Dcc, DynamicPricing.
+	CurrencyConversion *CurrencyConversion `json:"currencyConversion,omitempty"`
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
+}
+
+// PaymentCardPaymentMethod defines model for PaymentCardPaymentMethod.
+type PaymentCardPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Payment card model.
+	PaymentCard PaymentCard `json:"paymentCard"`
+
+	// Payment facilitator details provided by the merchant.
+	PaymentFacilitator *PaymentFacilitator `json:"paymentFacilitator,omitempty"`
+}
+
 // PaymentCardPaymentTokenUpdateRequest defines model for PaymentCardPaymentTokenUpdateRequest.
 type PaymentCardPaymentTokenUpdateRequest struct {
 
@@ -1383,6 +2426,216 @@ type PaymentCardPaymentTokenUpdateRequest struct {
 	StoreId *string `json:"storeId,omitempty"`
 }
 
+// PaymentCardPaymentTokenizationRequest defines model for PaymentCardPaymentTokenizationRequest.
+type PaymentCardPaymentTokenizationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentTokenizationRequest)
+	PaymentTokenizationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Payment card model.
+	PaymentCard PaymentCard `json:"paymentCard"`
+}
+
+// PaymentCardPreAuthTransaction defines model for PaymentCardPreAuthTransaction.
+type PaymentCardPreAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Request authentication of the payment card to verify the cardholder and be eligible for liability shift. An AuthenticationRequest should not be submitted with in the same request as an AuthenticationResult. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationRequest *AuthenticationRequest `json:"authenticationRequest,omitempty"`
+
+	// Submit the result of 3DS authentication managed outside of the gateway. An AuthenticationResult should not be submitted within the same request as an AuthenticationRequest. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationResult *AuthenticationResult `json:"authenticationResult,omitempty"`
+
+	// Use this model to create a payment token.
+	CreateToken *CreatePaymentToken `json:"createToken,omitempty"`
+
+	// This flag can only be used in a preAuth transaction that updates the amount of a previous preAuth transaction to either increase the preAuth amount (DecrementalPreAuthFlag = false) or decrease the preAuth amount (DecrementalPreAuthFlag = true).
+	DecrementalFlag *DecrementalPreAuthFlag `json:"decrementalFlag,omitempty"`
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
+
+	// Settle with multiple sub-merchants, sale and preAuth only.
+	SettlementSplit *SettlementSplit `json:"settlementSplit,omitempty"`
+
+	// Split-shipment related information, in order to reuse the same authorization.
+	SplitShipment *SplitShipment `json:"splitShipment,omitempty"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentCardSaleTransaction defines model for PaymentCardSaleTransaction.
+type PaymentCardSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Request authentication of the payment card to verify the cardholder and be eligible for liability shift. An AuthenticationRequest should not be submitted with in the same request as an AuthenticationResult. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationRequest *AuthenticationRequest `json:"authenticationRequest,omitempty"`
+
+	// Submit the result of 3DS authentication managed outside of the gateway. An AuthenticationResult should not be submitted within the same request as an AuthenticationRequest. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationResult *AuthenticationResult `json:"authenticationResult,omitempty"`
+
+	// Use this model to create a payment token.
+	CreateToken *CreatePaymentToken `json:"createToken,omitempty"`
+
+	// Currency conversion. Abstract class, do not use this class directly, use one of its children: Dcc, DynamicPricing.
+	CurrencyConversion *CurrencyConversion `json:"currencyConversion,omitempty"`
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
+
+	// Settle with multiple sub-merchants, sale and preAuth only.
+	SettlementSplit *SettlementSplit `json:"settlementSplit,omitempty"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentCardVerificationRequest defines model for PaymentCardVerificationRequest.
+type PaymentCardVerificationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AccountVerificationRequest)
+	AccountVerificationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Payment card model.
+	PaymentCard PaymentCard `json:"paymentCard"`
+}
+
+// PaymentDevice defines model for PaymentDevice.
+type PaymentDevice struct {
+
+	// The card brand.
+	Brand *string `json:"brand,omitempty"`
+
+	// Card function. This field is required when performing transactions for Brazil merchants.
+	CardFunction *CardFunction `json:"cardFunction,omitempty"`
+
+	// Name of cardholder.
+	CardholderName *string `json:"cardholderName,omitempty"`
+
+	// Data from device containing, at a minimum, a transaction-unique key serial number (KSN) and track 2 card data.
+	Data string `json:"data"`
+
+	// The data format.
+	DeviceType string `json:"deviceType"`
+
+	// Card verification value/number.
+	SecurityCode *string `json:"securityCode,omitempty"`
+}
+
+// PaymentDeviceCreditTransaction defines model for PaymentDeviceCreditTransaction.
+type PaymentDeviceCreditTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing payment device information.
+	PaymentMethod PaymentDevicePaymentMethod `json:"paymentMethod"`
+}
+
+// PaymentDeviceDisbursementTransaction defines model for PaymentDeviceDisbursementTransaction.
+type PaymentDeviceDisbursementTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Disbursement information. Abstract class, do not use this class directly, use one of its children: FundingTransactionType, DisbursementTransactionType.
+	Disbursement Disbursement `json:"disbursement"`
+
+	// Payment method containing payment device information.
+	PaymentMethod PaymentDevicePaymentMethod `json:"paymentMethod"`
+}
+
+// PaymentDevicePaymentMethod defines model for PaymentDevicePaymentMethod.
+type PaymentDevicePaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Information from the payment device including the blob data and its mode of entry.
+	PaymentDevice PaymentDevice `json:"paymentDevice"`
+
+	// Payment facilitator details provided by the merchant.
+	PaymentFacilitator *PaymentFacilitator `json:"paymentFacilitator,omitempty"`
+}
+
+// PaymentDevicePaymentTokenizationRequest defines model for PaymentDevicePaymentTokenizationRequest.
+type PaymentDevicePaymentTokenizationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentTokenizationRequest)
+	PaymentTokenizationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Information from the payment device including the blob data and its mode of entry.
+	PaymentDevice PaymentDevice `json:"paymentDevice"`
+}
+
+// PaymentDevicePreAuthTransaction defines model for PaymentDevicePreAuthTransaction.
+type PaymentDevicePreAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Use this model to create a payment token.
+	CreateToken *CreatePaymentToken `json:"createToken,omitempty"`
+
+	// This flag can only be used in a preAuth transaction that updates the amount of a previous preAuth transaction to either increase the preAuth amount (DecrementalPreAuthFlag = false) or decrease the preAuth amount (DecrementalPreAuthFlag = true).
+	DecrementalFlag *DecrementalPreAuthFlag `json:"decrementalFlag,omitempty"`
+
+	// Payment method containing payment device information.
+	PaymentMethod PaymentDevicePaymentMethod `json:"paymentMethod"`
+
+	// Settle with multiple sub-merchants, sale and preAuth only.
+	SettlementSplit *SettlementSplit `json:"settlementSplit,omitempty"`
+
+	// Split-shipment related information, in order to reuse the same authorization.
+	SplitShipment *SplitShipment `json:"splitShipment,omitempty"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentDeviceSaleTransaction defines model for PaymentDeviceSaleTransaction.
+type PaymentDeviceSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Use this model to create a payment token.
+	CreateToken *CreatePaymentToken `json:"createToken,omitempty"`
+
+	// Payment method containing payment device information.
+	PaymentMethod PaymentDevicePaymentMethod `json:"paymentMethod"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentFacilitator defines model for PaymentFacilitator.
+type PaymentFacilitator struct {
+
+	// External merchant ID of the payment facilitator.
+	ExternalMerchantId string `json:"externalMerchantId"`
+
+	// Payment facilitator name.
+	Name string `json:"name"`
+
+	// Payment facilitator ID supplied during boarding.
+	PaymentFacilitatorId string `json:"paymentFacilitatorId"`
+
+	// Independent sales organization (ISO) ID provided by Mastercard.
+	SaleOrganizationId *string `json:"saleOrganizationId,omitempty"`
+
+	// Once sub-merchant element is given, the transaction is considered to be a sub-merchant transaction.
+	SubMerchantData *SubMerchantData `json:"subMerchantData,omitempty"`
+}
+
+// PaymentMethod defines model for PaymentMethod.
+type PaymentMethod map[string]interface{}
+
 // PaymentMethodDetails defines model for PaymentMethodDetails.
 type PaymentMethodDetails struct {
 
@@ -1391,6 +2644,16 @@ type PaymentMethodDetails struct {
 
 	// Type of payment method.
 	PaymentMethodType *PaymentMethodType `json:"paymentMethodType,omitempty"`
+}
+
+// PaymentMethodPaymentSchedulesRequest defines model for PaymentMethodPaymentSchedulesRequest.
+type PaymentMethodPaymentSchedulesRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentSchedulesRequest)
+	PaymentSchedulesRequest
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing payment card information.
+	PaymentMethod PaymentCardPaymentMethod `json:"paymentMethod"`
 }
 
 // PaymentMethodType defines model for PaymentMethodType.
@@ -1524,6 +2787,19 @@ type PaymentSchedulesResponse struct {
 	TransactionResponse *TransactionResponse `json:"transactionResponse,omitempty"`
 }
 
+// PaymentTokenCreditTransaction defines model for PaymentTokenCreditTransaction.
+type PaymentTokenCreditTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Currency conversion. Abstract class, do not use this class directly, use one of its children: Dcc, DynamicPricing.
+	CurrencyConversion *CurrencyConversion `json:"currencyConversion,omitempty"`
+
+	// Payment method containing payment tokenization information.
+	PaymentMethod PaymentTokenPaymentMethod `json:"paymentMethod"`
+}
+
 // PaymentTokenDetails defines model for PaymentTokenDetails.
 type PaymentTokenDetails struct {
 	// Embedded struct due to allOf(#/components/schemas/CreatePaymentToken)
@@ -1543,6 +2819,98 @@ type PaymentTokenDetails struct {
 	Type *string `json:"type,omitempty"`
 }
 
+// PaymentTokenDisbursementTransaction defines model for PaymentTokenDisbursementTransaction.
+type PaymentTokenDisbursementTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Disbursement information. Abstract class, do not use this class directly, use one of its children: FundingTransactionType, DisbursementTransactionType.
+	Disbursement Disbursement `json:"disbursement"`
+
+	// Payment method containing payment tokenization information.
+	PaymentMethod PaymentTokenPaymentMethod `json:"paymentMethod"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentTokenInfoLookupRequest defines model for PaymentTokenInfoLookupRequest.
+type PaymentTokenInfoLookupRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AccountInfoLookupRequest)
+	AccountInfoLookupRequest
+	// Embedded fields due to inline allOf schema
+
+	// Payment token usage details.
+	PaymentToken UsePaymentToken `json:"paymentToken"`
+}
+
+// PaymentTokenPaymentMethod defines model for PaymentTokenPaymentMethod.
+type PaymentTokenPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Payment facilitator details provided by the merchant.
+	PaymentFacilitator *PaymentFacilitator `json:"paymentFacilitator,omitempty"`
+
+	// Payment token usage details.
+	PaymentToken UsePaymentToken `json:"paymentToken"`
+}
+
+// PaymentTokenPreAuthTransaction defines model for PaymentTokenPreAuthTransaction.
+type PaymentTokenPreAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Request authentication of the payment card to verify the cardholder and be eligible for liability shift. An AuthenticationRequest should not be submitted with in the same request as an AuthenticationResult. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationRequest *AuthenticationRequest `json:"authenticationRequest,omitempty"`
+
+	// Submit the result of 3DS authentication managed outside of the gateway. An AuthenticationResult should not be submitted within the same request as an AuthenticationRequest. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationResult *AuthenticationResult `json:"authenticationResult,omitempty"`
+
+	// This flag can only be used in a preAuth transaction that updates the amount of a previous preAuth transaction to either increase the preAuth amount (DecrementalPreAuthFlag = false) or decrease the preAuth amount (DecrementalPreAuthFlag = true).
+	DecrementalFlag *DecrementalPreAuthFlag `json:"decrementalFlag,omitempty"`
+
+	// Payment method containing payment tokenization information.
+	PaymentMethod PaymentTokenPaymentMethod `json:"paymentMethod"`
+
+	// Settle with multiple sub-merchants, sale and preAuth only.
+	SettlementSplit *SettlementSplit `json:"settlementSplit,omitempty"`
+
+	// Split-shipment related information, in order to reuse the same authorization.
+	SplitShipment *SplitShipment `json:"splitShipment,omitempty"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
+// PaymentTokenSaleTransaction defines model for PaymentTokenSaleTransaction.
+type PaymentTokenSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Request authentication of the payment card to verify the cardholder and be eligible for liability shift. An AuthenticationRequest should not be submitted with in the same request as an AuthenticationResult. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationRequest *AuthenticationRequest `json:"authenticationRequest,omitempty"`
+
+	// Submit the result of 3DS authentication managed outside of the gateway. An AuthenticationResult should not be submitted within the same request as an AuthenticationRequest. Abstract class, do not use this class directly, use one of its children.
+	AuthenticationResult *AuthenticationResult `json:"authenticationResult,omitempty"`
+
+	// Currency conversion. Abstract class, do not use this class directly, use one of its children: Dcc, DynamicPricing.
+	CurrencyConversion *CurrencyConversion `json:"currencyConversion,omitempty"`
+
+	// Payment method containing payment tokenization information.
+	PaymentMethod PaymentTokenPaymentMethod `json:"paymentMethod"`
+
+	// Settle with multiple sub-merchants, sale and preAuth only.
+	SettlementSplit *SettlementSplit `json:"settlementSplit,omitempty"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+}
+
 // PaymentTokenUpdateResponse defines model for PaymentTokenUpdateResponse.
 type PaymentTokenUpdateResponse struct {
 	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
@@ -1555,6 +2923,16 @@ type PaymentTokenUpdateResponse struct {
 
 	// Time of the request.
 	RequestTime *int64 `json:"requestTime,omitempty"`
+}
+
+// PaymentTokenVerificationRequest defines model for PaymentTokenVerificationRequest.
+type PaymentTokenVerificationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AccountVerificationRequest)
+	AccountVerificationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Payment token usage details.
+	PaymentToken UsePaymentToken `json:"paymentToken"`
 }
 
 // PaymentTokenizationErrorResponse defines model for PaymentTokenizationErrorResponse.
@@ -1658,6 +3036,16 @@ type PaymentUrlDetailResponse struct {
 	PaymentUrlDetails *[]PaymentUrlDetail `json:"paymentUrlDetails,omitempty"`
 }
 
+// PaymentUrlErrorResponse defines model for PaymentUrlErrorResponse.
+type PaymentUrlErrorResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentUrlResponse)
+	PaymentUrlResponse
+	// Embedded fields due to inline allOf schema
+
+	// Error information.
+	Error *Error `json:"error,omitempty"`
+}
+
 // PaymentUrlRequest defines model for PaymentUrlRequest.
 type PaymentUrlRequest struct {
 
@@ -1737,6 +3125,16 @@ const (
 	PaymentUrlStatus_Used      PaymentUrlStatus = "Used"
 )
 
+// PaypalCreditTransaction defines model for PaypalCreditTransaction.
+type PaypalCreditTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing PayPal information.
+	PaymentMethod PayPalPaymentMethod `json:"paymentMethod"`
+}
+
 // Phone defines model for Phone.
 type Phone struct {
 
@@ -1745,6 +3143,32 @@ type Phone struct {
 
 	// Type of phone.
 	Type *string `json:"type,omitempty"`
+}
+
+// PostAuthTransaction defines model for PostAuthTransaction.
+type PostAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Identifying information about a merchant which appears on buyer's credit/debit card statements.
+	SoftDescriptor *SoftDescriptor `json:"softDescriptor,omitempty"`
+
+	// Split-shipment related information, in order to reuse the same authorization.
+	SplitShipment *SplitShipment `json:"splitShipment,omitempty"`
+
+	// Amount of the transaction.
+	TransactionAmount Amount `json:"transactionAmount"`
+
+	// The source of the transaction. The possible values are ECOM (if the order was received via email or Internet), MAIL, PHONE and RETAIL (face to face).
+	TransactionOrigin *TransactionOrigin `json:"transactionOrigin,omitempty"`
+}
+
+// Primary defines model for Primary.
+type Primary struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
 }
 
 // PrimaryTransaction defines model for PrimaryTransaction.
@@ -1807,6 +3231,25 @@ type ProcessorData struct {
 
 	// MasterCard provided Transaction Integrity Class for Point of Sale (POS) Purchase and Purchase with Cash Back transactions initiated on the Authorization Platform.
 	TransactionIntegrityClass *string `json:"transactionIntegrityClass,omitempty"`
+}
+
+// Properties defines model for Properties.
+type Properties struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+
+	// Hexadecimal color value.
+	FontColor *Color `json:"fontColor,omitempty"`
+
+	// Font face property.
+	FontFace *FontFace `json:"fontFace,omitempty"`
+
+	// Font size property.
+	FontSize *FontSize `json:"fontSize,omitempty"`
+
+	// Font weight property.
+	FontWeight *FontWeight `json:"fontWeight,omitempty"`
 }
 
 // PurchaseCards defines model for PurchaseCards.
@@ -1900,6 +3343,37 @@ type ReceiptRequestInfo struct {
 	Type string `json:"type"`
 }
 
+// ReceiverInfo defines model for ReceiverInfo.
+type ReceiverInfo struct {
+
+	// Receiver account number.
+	AccountNumber *string `json:"accountNumber,omitempty"`
+
+	// Receiver city.
+	City string `json:"city"`
+
+	// Receiver country code.
+	CountryCode string `json:"countryCode"`
+
+	// Receiver name.
+	Name string `json:"name"`
+
+	// Receiver phone number.
+	PhoneNumber string `json:"phoneNumber"`
+
+	// Receiver postal code.
+	PostalCode string `json:"postalCode"`
+
+	// Receiver reference number.
+	ReferenceNumber string `json:"referenceNumber"`
+
+	// Receiver state.
+	StateCode string `json:"stateCode"`
+
+	// Receiver street address.
+	StreetAddress string `json:"streetAddress"`
+}
+
 // RecurringPaymentDetails defines model for RecurringPaymentDetails.
 type RecurringPaymentDetails struct {
 
@@ -1953,6 +3427,26 @@ type RecurringPaymentDetailsResponse struct {
 	RecurringPaymentDetails *RecurringPaymentDetails `json:"recurringPaymentDetails,omitempty"`
 }
 
+// ReferencedOrderPaymentSchedulesRequest defines model for ReferencedOrderPaymentSchedulesRequest.
+type ReferencedOrderPaymentSchedulesRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentSchedulesRequest)
+	PaymentSchedulesRequest
+	// Embedded fields due to inline allOf schema
+
+	// Order ID used to create recurring payment from existing transaction.
+	ReferencedOrderId string `json:"referencedOrderId"`
+}
+
+// ReferencedOrderPaymentTokenizationRequest defines model for ReferencedOrderPaymentTokenizationRequest.
+type ReferencedOrderPaymentTokenizationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentTokenizationRequest)
+	PaymentTokenizationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Retrieves the payment instrument information from an existing order.
+	ReferencedOrderId string `json:"referencedOrderId"`
+}
+
 // RegistrationMethod defines model for RegistrationMethod.
 type RegistrationMethod struct {
 
@@ -1978,6 +3472,26 @@ type RegistrationMethod struct {
 	UserDefined *map[string]interface{} `json:"userDefined,omitempty"`
 }
 
+// RemoveFraudBlockedItemsResponse defines model for RemoveFraudBlockedItemsResponse.
+type RemoveFraudBlockedItemsResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+
+	// Status from delete fraud blocked items operation.
+	Status *string `json:"status,omitempty"`
+}
+
+// ResponseAmountComponents defines model for ResponseAmountComponents.
+type ResponseAmountComponents struct {
+	// Embedded struct due to allOf(#/components/schemas/AmountComponents)
+	AmountComponents
+	// Embedded fields due to inline allOf schema
+
+	// Amount added for proccessing or handling fees.
+	ConvenienceFee *float32 `json:"convenienceFee,omitempty"`
+}
+
 // ResponseType defines model for ResponseType.
 type ResponseType string
 
@@ -1993,6 +3507,25 @@ const (
 	ResponseType_Unauthorized               ResponseType = "Unauthorized"
 	ResponseType_UnsupportedMediaType       ResponseType = "UnsupportedMediaType"
 )
+
+// ReturnTransaction defines model for ReturnTransaction.
+type ReturnTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Currency conversion. Abstract class, do not use this class directly, use one of its children: Dcc, DynamicPricing.
+	CurrencyConversion *CurrencyConversion `json:"currencyConversion,omitempty"`
+
+	// Identifying information about a merchant which appears on buyer's credit/debit card statements.
+	SoftDescriptor *SoftDescriptor `json:"softDescriptor,omitempty"`
+
+	// Object for sending stored credentials.
+	StoredCredentials *StoredCredential `json:"storedCredentials,omitempty"`
+
+	// Amount of the transaction.
+	TransactionAmount Amount `json:"transactionAmount"`
+}
 
 // ScoreOnlyRequest defines model for ScoreOnlyRequest.
 type ScoreOnlyRequest struct {
@@ -2101,6 +3634,102 @@ type SecondaryTransaction struct {
 	StoreId *string `json:"storeId,omitempty"`
 }
 
+// Secure3D10AuthenticationRequest defines model for Secure3D10AuthenticationRequest.
+type Secure3D10AuthenticationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationRequest)
+	AuthenticationRequest
+	// Embedded fields due to inline allOf schema
+}
+
+// Secure3D10AuthenticationResult defines model for Secure3D10AuthenticationResult.
+type Secure3D10AuthenticationResult struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationResult)
+	AuthenticationResult
+	// Embedded fields due to inline allOf schema
+
+	// Result of authentication attempt from Payer Authentication Response (PaRes).
+	AuthenticationAttemptResult *string `json:"authenticationAttemptResult,omitempty"`
+
+	// The Cardholder Authentication Verification Value (CAVV) is a cryptographic value derived by the issuer during payment authentication that can provide evidence of the results of payment authentication during an online purchase.
+	Cavv *string `json:"cavv,omitempty"`
+
+	// Card enrollment result from the Verification Response (VeRes).
+	VerificationResponse *string `json:"verificationResponse,omitempty"`
+
+	// The transaction identifier (XID) is a unique tracking number set by the merchant.
+	Xid *string `json:"xid,omitempty"`
+}
+
+// Secure3D10AuthenticationUpdateRequest defines model for Secure3D10AuthenticationUpdateRequest.
+type Secure3D10AuthenticationUpdateRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationUpdateRequest)
+	AuthenticationUpdateRequest
+	// Embedded fields due to inline allOf schema
+
+	// Formatted string encoding transaction time, order ID, and return URL data.
+	MerchantData string `json:"merchantData"`
+
+	// A formatted message providing results of the issuer’s cardholder authentication.
+	PayerAuthenticationResponse string `json:"payerAuthenticationResponse"`
+
+	// Card security code if required by merchant.
+	SecurityCode *string `json:"securityCode,omitempty"`
+}
+
+// Secure3D21AuthenticationRequest defines model for Secure3D21AuthenticationRequest.
+type Secure3D21AuthenticationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationRequest)
+	AuthenticationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Indicates whether or not a challenge should be performed. 01 = No preference (You have no preference whether a challenge should be performed. This is the default value) 02 = No challenge requested (You prefer that no challenge should be performed) 03 = Challenge requested: 3DS Requestor Preference (You prefer that a challenge should be performed) 04 = Challenge requested: Mandate (There are local or regional mandates that mean that a challenge must be performed)
+	ChallengeIndicator *string `json:"challengeIndicator,omitempty"`
+
+	// Defines the size of the challenge window displayed to customers during authentication. 01 = 250 x 400 02 = 390 x 400 03 = 500 x 600 04 = 600 x 400 05 = Full screen
+	ChallengeWindowSize *string `json:"challengeWindowSize,omitempty"`
+
+	// The 3DS method iframe and transaction ID will be sent here. Note this must be a valid URL (special characters should be URL-encoded).
+	MethodNotificationURL *string `json:"methodNotificationURL,omitempty"`
+
+	// The result of the authentication will be sent to this URL. If not provided, a term URL will be dynamically generated. Note this must be a valid URL (special characters should be URL-encoded).
+	TermURL *string `json:"termURL,omitempty"`
+}
+
+// Secure3D21AuthenticationResult defines model for Secure3D21AuthenticationResult.
+type Secure3D21AuthenticationResult struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationResult)
+	AuthenticationResult
+	// Embedded fields due to inline allOf schema
+
+	// The result of authentication attempt returned by the 3D Secure authentication process (PaRes).
+	AuthenticationResponse *string `json:"authenticationResponse,omitempty"`
+
+	// The Cardholder Authentication Verification Value (CAVV) is a cryptographic value derived by the issuer during payment authentication that can provide evidence of the results of payment authentication during an online purchase.
+	Cavv *string `json:"cavv,omitempty"`
+
+	// The response transaction UUID. Only applicable to MasterCard.
+	TransactionId *string `json:"transactionId,omitempty"`
+
+	// The transaction status as returned by the 3D Secure authentication process.
+	TransactionStatus *string `json:"transactionStatus,omitempty"`
+
+	// The transaction identifier (XID) is a unique tracking number set by the merchant.
+	Xid *string `json:"xid,omitempty"`
+}
+
+// Secure3D21AuthenticationUpdateRequest defines model for Secure3D21AuthenticationUpdateRequest.
+type Secure3D21AuthenticationUpdateRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationUpdateRequest)
+	AuthenticationUpdateRequest
+	// Embedded fields due to inline allOf schema
+
+	// Encapsulates response data from the ACS.
+	AcsResponse *ACSResponse `json:"acsResponse,omitempty"`
+
+	// Indicates how the merchant received the 3DS method.
+	MethodNotificationStatus *string `json:"methodNotificationStatus,omitempty"`
+}
+
 // Secure3DAuthenticationResponse defines model for Secure3DAuthenticationResponse.
 type Secure3DAuthenticationResponse struct {
 
@@ -2148,6 +3777,124 @@ type Secure3dResponse struct {
 
 	// Code received after successful payer-auth verification.
 	ResponseCode3dSecure *string `json:"responseCode3dSecure,omitempty"`
+}
+
+// SenderInfo defines model for SenderInfo.
+type SenderInfo struct {
+
+	// Sender account number.
+	AccountNumber string `json:"accountNumber"`
+
+	// Sender date of birth (YYYYMMDD).
+	BirthDate *string `json:"birthDate,omitempty"`
+
+	// Sender city.
+	City string `json:"city"`
+
+	// Sender country code.
+	CountryCode string `json:"countryCode"`
+
+	// Sender name.
+	Name string `json:"name"`
+
+	// Sender phone number.
+	PhoneNumber string `json:"phoneNumber"`
+
+	// Sender postal code.
+	PostalCode string `json:"postalCode"`
+
+	// Sender reference number.
+	ReferenceNumber string `json:"referenceNumber"`
+
+	// Sender state.
+	StateCode string `json:"stateCode"`
+
+	// Sender street address.
+	StreetAddress string `json:"streetAddress"`
+}
+
+// Sepa defines model for Sepa.
+type Sepa struct {
+
+	// Country of residence of the payer using the ISO 3166 standard.
+	Country string `json:"country"`
+
+	// The email address of the payer.
+	Email *string `json:"email,omitempty"`
+
+	// Bank account in IBAN format.
+	Iban string `json:"iban"`
+
+	// Model for the SEPA Mandate information.
+	Mandate SepaMandate `json:"mandate"`
+
+	// The name of the payer.
+	Name string `json:"name"`
+}
+
+// SepaMandate defines model for SepaMandate.
+type SepaMandate struct {
+
+	// Existing mandate reference, managed by merchant. Must match [A-Za-z0-9:?/+(),. -]{1,35} and not start with two slashes ("//"). Also known as the mandate ID.
+	Reference string `json:"reference"`
+
+	// Date of mandate signature.
+	SignatureDate openapi_types.Date `json:"signatureDate"`
+
+	// Sequence type of the direct debit. This defaults to 'SINGLE' if not provided.
+	Type string `json:"type"`
+
+	// Valid URL pointing to the SEPA mandate (PDF / HTML format recommended).
+	Url string `json:"url"`
+}
+
+// SepaPaymentMethod defines model for SepaPaymentMethod.
+type SepaPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/PaymentMethod)
+	PaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// The payment object for SEPA Local Payment.
+	Sepa Sepa `json:"sepa"`
+}
+
+// SepaSaleTransaction defines model for SepaSaleTransaction.
+type SepaSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment method containing sepa information.
+	PaymentMethod SepaPaymentMethod `json:"paymentMethod"`
+}
+
+// SettlementSplit defines model for SettlementSplit.
+type SettlementSplit []SubMerchantSplit
+
+// SharedSecretConfigurationRequest defines model for SharedSecretConfigurationRequest.
+type SharedSecretConfigurationRequest struct {
+
+	// Shared secret/password for Connect.
+	SharedSecret string `json:"sharedSecret"`
+}
+
+// SharedSecretConfigurationResponse defines model for SharedSecretConfigurationResponse.
+type SharedSecretConfigurationResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+
+	// The message/status received after updating shared secret service config.
+	ResponseMessage *string `json:"responseMessage,omitempty"`
+
+	// Response timestamp.
+	ResponseTimestamp *int64 `json:"responseTimestamp,omitempty"`
+
+	// Shared secret/password for Connect.
+	SharedSecret *string `json:"sharedSecret,omitempty"`
+
+	// An optional outlet ID for clients that support multiple stores in the same developer app.
+	StoreId *string `json:"storeId,omitempty"`
 }
 
 // ShipToAddress defines model for ShipToAddress.
@@ -2202,6 +3949,313 @@ type SoftDescriptor struct {
 
 	// The 4-digit merchant category code (MCC). The merchant might be associated with multiple MCCs. In that case the MCC provided here will be the one that better describes the current transaction.
 	Mcc *string `json:"mcc,omitempty"`
+}
+
+// SplitShipment defines model for SplitShipment.
+type SplitShipment struct {
+
+	// Indicates whether the transaction is the final shipment.
+	FinalShipment *bool `json:"finalShipment,omitempty"`
+
+	// Total count of the shipment, can be set at preauth or the first postauth.
+	TotalCount *int32 `json:"totalCount,omitempty"`
+}
+
+// StoreBrandingStyleConfiguration defines model for StoreBrandingStyleConfiguration.
+type StoreBrandingStyleConfiguration struct {
+
+	// Object contains classic mode branding style properties.
+	Classic *ClassicMode `json:"classic,omitempty"`
+
+	// Object contains combined mode branding style properties.
+	Combined *CombinedMode `json:"combined,omitempty"`
+
+	// An optional outlet id for clients that support multiple stores in the same developer app.
+	Id string `json:"id"`
+}
+
+// StoreEmailSettings defines model for StoreEmailSettings.
+type StoreEmailSettings struct {
+
+	// Object that holds data to configure email notifications.
+	EmailNotificationData EmailNotificationData `json:"emailNotificationData"`
+
+	// An outlet identificator.
+	Id string `json:"id"`
+}
+
+// StoreEmailSettingsResult defines model for StoreEmailSettingsResult.
+type StoreEmailSettingsResult struct {
+
+	// An outlet identificator.
+	Id *string `json:"id,omitempty"`
+
+	// Status from email settings.
+	Status *string `json:"status,omitempty"`
+}
+
+// StoreFraudSettings defines model for StoreFraudSettings.
+type StoreFraudSettings struct {
+
+	// Object that holds all fraud settings.
+	FraudSettings FraudSettings `json:"fraudSettings"`
+
+	// The outlet identificator.
+	Id string `json:"id"`
+}
+
+// StoreFraudSettingsResult defines model for StoreFraudSettingsResult.
+type StoreFraudSettingsResult struct {
+
+	// Token identifier object.
+	BlockedCardIdentifier *TokenIdentifier `json:"blockedCardIdentifier,omitempty"`
+
+	// An outlet identificator.
+	Id *string `json:"id,omitempty"`
+
+	// Status from fraud settings.
+	Status *string `json:"status,omitempty"`
+}
+
+// StoreUrlConfiguration defines model for StoreUrlConfiguration.
+type StoreUrlConfiguration struct {
+
+	// An optional outlet id for clients that support multiple stores in the same developer app.
+	Id string `json:"id"`
+
+	// Overwrite URLs in database by those from request.
+	OverwriteUrlAllowed *bool `json:"overwriteUrlAllowed,omitempty"`
+
+	// Recurring transaction notification URL for recurring payments.
+	RecurringTransactionNotificationUrl *string `json:"recurringTransactionNotificationUrl,omitempty"`
+
+	// Response failure URL for Connect.
+	ResponseFailureUrl *string `json:"responseFailureUrl,omitempty"`
+
+	// Response success URL for Connect.
+	ResponseSuccessUrl *string `json:"responseSuccessUrl,omitempty"`
+
+	// Skip connect result page when transaction is not approved.
+	SkipResultPageForFailure *bool `json:"skipResultPageForFailure,omitempty"`
+
+	// Skip connect result page when transaction is approved.
+	SkipResultPageForSuccess *bool `json:"skipResultPageForSuccess,omitempty"`
+
+	// Transaction notification URL for Connect.
+	TransactionNotificationUrl *string `json:"transactionNotificationUrl,omitempty"`
+}
+
+// StoreUrlConfigurationRequest defines model for StoreUrlConfigurationRequest.
+type StoreUrlConfigurationRequest struct {
+	Stores *[]StoreUrlConfiguration `json:"stores,omitempty"`
+}
+
+// StoreUrlConfigurationResponse defines model for StoreUrlConfigurationResponse.
+type StoreUrlConfigurationResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+	Stores *[]StoreUrlConfigurationResult `json:"stores,omitempty"`
+}
+
+// StoreUrlConfigurationResult defines model for StoreUrlConfigurationResult.
+type StoreUrlConfigurationResult struct {
+
+	// An optional outlet id for clients that support multiple stores in the same developer app.
+	Id *string `json:"id,omitempty"`
+
+	// Status from store url configuration process.
+	Status *string `json:"status,omitempty"`
+}
+
+// StoredCredential defines model for StoredCredential.
+type StoredCredential struct {
+
+	// Indicates whether it is a merchant-initiated or explicitly consented to by card holder. Valid values are 'MERCHANT' and 'CARDHOLDER'.
+	Initiator *string `json:"initiator,omitempty"`
+
+	// The transaction ID received from schemes for the initial transaction. May be required if sequence is 'SUBSEQUENT'.
+	ReferencedSchemeTransactionId *string `json:"referencedSchemeTransactionId,omitempty"`
+
+	// Indicates if the transaction is scheduled or part of an installment.
+	Scheduled bool `json:"scheduled"`
+
+	// Indicates if the transaction is first or subsequent. Valid values are 'FIRST' and 'SUBSEQUENT'.
+	Sequence string `json:"sequence"`
+}
+
+// SubMerchantData defines model for SubMerchantData.
+type SubMerchantData struct {
+
+	// Model for address information.
+	Address *Address `json:"address,omitempty"`
+
+	// Document information.
+	Document *Document `json:"document,omitempty"`
+
+	// Store legal name.
+	LegalName *string `json:"legalName,omitempty"`
+
+	// Merchant category code.
+	Mcc string `json:"mcc"`
+
+	// Sub-merchant ID.
+	MerchantId *string `json:"merchantId,omitempty"`
+
+	// Timezone.
+	Timezone *string `json:"timezone,omitempty"`
+}
+
+// SubMerchantSplit defines model for SubMerchantSplit.
+type SubMerchantSplit struct {
+
+	// The amount each sub-merchant receives.
+	Amount float32 `json:"amount"`
+
+	// ID of merchant for tracking.
+	MerchantID string `json:"merchantID"`
+}
+
+// TeleCheckAchPaymentMethod defines model for TeleCheckAchPaymentMethod.
+type TeleCheckAchPaymentMethod struct {
+
+	// Bank account number.
+	AccountNumber string `json:"accountNumber"`
+
+	// Identifies if the account type is checking or savings.
+	AccountType string `json:"accountType"`
+
+	// Billing details for telecheck transactions.
+	AchBillTo struct {
+
+		// Customer billing address, first line.
+		AddressOne string `json:"addressOne"`
+
+		// Customer billing address, second line.
+		AddressTwo *string `json:"addressTwo,omitempty"`
+
+		// Customer billing city.
+		City string `json:"city"`
+
+		// ISO country code. Required if performing an ICA transaction.
+		CountryCode *string `json:"countryCode,omitempty"`
+
+		// Customer billing email. Required if performing an ICA transaction.
+		Email *string `json:"email,omitempty"`
+
+		// Customer billing first name.
+		FirstName *string `json:"firstName,omitempty"`
+
+		// Customer billing last name.
+		LastName string `json:"lastName"`
+
+		// Customer billing phone number.
+		Phone string `json:"phone"`
+
+		// Customer billing state.
+		State string `json:"state"`
+
+		// Customer billing zip code.
+		Zip string `json:"zip"`
+	} `json:"achBillTo"`
+
+	// ACH application type values will be one of either TeleCheckICAPaymentMethod or TeleCheckCBPPaymentMethod.
+	AchType string `json:"achType"`
+
+	// Used to track the agent transaction activity.
+	AgentId *string `json:"agentId,omitempty"`
+
+	// Check number.
+	CheckNumber *string `json:"checkNumber,omitempty"`
+
+	// Identifies if the check type is personal or company.
+	CheckType string `json:"checkType"`
+
+	// Identification information.
+	ManualIdInfo *IdInfo `json:"manualIdInfo,omitempty"`
+
+	// Identifies the product code in the transaction.
+	ProductCode *string `json:"productCode,omitempty"`
+
+	// Date the consumer originally registered in format MMDDYYYY.
+	RegistrationDate *openapi_types.Date `json:"registrationDate,omitempty"`
+
+	// Unique ID assigned by the merchant for the consumer (never recycled). It is an additional level of authentication. To use this feature, the merchant must work with TeleCheck Risk to discuss. Registration IDs must not be generated for an existing or returning consumer returns. The single registration ID must be unique per consumer.
+	RegistrationId *string `json:"registrationId,omitempty"`
+
+	// Release type is used as a risk variable to gauge risk level when the merchant is releasing the purchased merchandise.
+	ReleaseType *string `json:"releaseType,omitempty"`
+
+	// Bank routing number.
+	RoutingNumber string `json:"routingNumber"`
+
+	// Session identifier.
+	SessionId string `json:"sessionId"`
+
+	// Identification information.
+	SupplementIdInfo *IdInfo `json:"supplementIdInfo,omitempty"`
+
+	// Identifies the city where the original sale transaction occurred.
+	TerminalCity *string `json:"terminalCity,omitempty"`
+
+	// Identifies the register or lane number where the original sale transaction occurred.
+	TerminalId *string `json:"terminalId,omitempty"`
+
+	// Identifies the US state or territory where the original sale transaction occurred.
+	TerminalState *string `json:"terminalState,omitempty"`
+
+	// Flags a transaction as a VIP order (based on merchant criteria). This field should not be sent for non-VIP orders.
+	VipCustomer *string `json:"vipCustomer,omitempty"`
+}
+
+// TeleCheckCBPPaymentMethod defines model for TeleCheckCBPPaymentMethod.
+type TeleCheckCBPPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/TeleCheckAchPaymentMethod)
+	TeleCheckAchPaymentMethod
+	// Embedded fields due to inline allOf schema
+}
+
+// TeleCheckICAPaymentMethod defines model for TeleCheckICAPaymentMethod.
+type TeleCheckICAPaymentMethod struct {
+	// Embedded struct due to allOf(#/components/schemas/TeleCheckAchPaymentMethod)
+	TeleCheckAchPaymentMethod
+	// Embedded fields due to inline allOf schema
+
+	// Customer IP address from the terminal where the order was placed (as captured by merchant).
+	CustomerIpAddress string `json:"customerIpAddress"`
+
+	// International mobile equipment identity code.
+	ImeiCode *string `json:"imeiCode,omitempty"`
+
+	// Identifies if the transaction is single or recurring for ACH transaction which is a optional field for Application Type ICA.
+	RecurringType *AchRecurringType `json:"recurringType,omitempty"`
+}
+
+// Text defines model for Text.
+type Text struct {
+	Primary *Primary `json:"primary,omitempty"`
+	Title   *Title   `json:"title,omitempty"`
+}
+
+// Title defines model for Title.
+type Title struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
+}
+
+// TokenIdentifier defines model for TokenIdentifier.
+type TokenIdentifier struct {
+
+	// Token identifier.
+	TokenIdentifier *string `json:"tokenIdentifier,omitempty"`
+}
+
+// TopBar defines model for TopBar.
+type TopBar struct {
+
+	// Hexadecimal color value.
+	Color *Color `json:"color,omitempty"`
 }
 
 // TransactionErrorResponse defines model for TransactionErrorResponse.
@@ -2317,6 +4371,55 @@ const (
 	TransactionType_VOID          TransactionType = "VOID"
 )
 
+// UnionPayAuthenticationRequest defines model for UnionPayAuthenticationRequest.
+type UnionPayAuthenticationRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationRequest)
+	AuthenticationRequest
+	// Embedded fields due to inline allOf schema
+
+	// Mobile number for SMS verification.
+	SmsPhoneNumber string `json:"smsPhoneNumber"`
+}
+
+// UnionPayAuthenticationUpdateRequest defines model for UnionPayAuthenticationUpdateRequest.
+type UnionPayAuthenticationUpdateRequest struct {
+	// Embedded struct due to allOf(#/components/schemas/AuthenticationUpdateRequest)
+	AuthenticationUpdateRequest
+	// Embedded fields due to inline allOf schema
+
+	// Card security code if required by merchant.
+	SecurityCode *string `json:"securityCode,omitempty"`
+
+	// Customer mobile number for SMS verification.
+	SmsVerificationCode string `json:"smsVerificationCode"`
+}
+
+// UpdateEmailSettingsRequest defines model for UpdateEmailSettingsRequest.
+type UpdateEmailSettingsRequest struct {
+	Stores []StoreEmailSettings `json:"stores"`
+}
+
+// UpdateEmailSettingsResponse defines model for UpdateEmailSettingsResponse.
+type UpdateEmailSettingsResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+	Stores *[]StoreEmailSettingsResult `json:"stores,omitempty"`
+}
+
+// UpdateFraudSettingsRequest defines model for UpdateFraudSettingsRequest.
+type UpdateFraudSettingsRequest struct {
+	Stores *[]StoreFraudSettings `json:"stores,omitempty"`
+}
+
+// UpdateFraudSettingsResponse defines model for UpdateFraudSettingsResponse.
+type UpdateFraudSettingsResponse struct {
+	// Embedded struct due to allOf(#/components/schemas/BasicResponse)
+	BasicResponse
+	// Embedded fields due to inline allOf schema
+	Stores *[]StoreFraudSettingsResult `json:"stores,omitempty"`
+}
+
 // UpdatePaymentToken defines model for UpdatePaymentToken.
 type UpdatePaymentToken struct {
 
@@ -2328,6 +4431,25 @@ type UpdatePaymentToken struct {
 
 	// If the token is reusable.
 	Reusable *bool `json:"reusable,omitempty"`
+
+	// Client-supplied payment token value.
+	Value string `json:"value"`
+}
+
+// UsePaymentToken defines model for UsePaymentToken.
+type UsePaymentToken struct {
+
+	// Required for normal transactions except for payment with 'RECURRING' flags.
+	ExpiryDate *Expiration `json:"expiryDate,omitempty"`
+
+	// Card function. This field is required when performing transactions for Brazil merchants.
+	Function *CardFunction `json:"function,omitempty"`
+
+	// Card verification value/number.
+	SecurityCode *string `json:"securityCode,omitempty"`
+
+	// The ID of a same store (or) sibling store in a hierarchy for which the token was originally created.
+	TokenOriginStoreId *string `json:"tokenOriginStoreId,omitempty"`
 
 	// Client-supplied payment token value.
 	Value string `json:"value"`
@@ -2372,6 +4494,62 @@ type VerificationCvv struct {
 	Status *string `json:"status,omitempty"`
 }
 
+// VoidPreAuthTransactions defines model for VoidPreAuthTransactions.
+type VoidPreAuthTransactions struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+}
+
+// VoidTransaction defines model for VoidTransaction.
+type VoidTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/SecondaryTransaction)
+	SecondaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Amount of the transaction.
+	TransactionAmount *Amount `json:"transactionAmount,omitempty"`
+}
+
+// WalletPaymentMethod defines model for WalletPaymentMethod.
+type WalletPaymentMethod struct {
+
+	// Type of wallet.
+	WalletType string `json:"walletType"`
+}
+
+// WalletPreAuthTransaction defines model for WalletPreAuthTransaction.
+type WalletPreAuthTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// This flag can only be used in a preAuth transaction that updates the amount of a previous preAuth transaction to either increase the preAuth amount (DecrementalPreAuthFlag = false) or decrease the preAuth amount (DecrementalPreAuthFlag = true).
+	DecrementalFlag *DecrementalPreAuthFlag `json:"decrementalFlag,omitempty"`
+
+	// Payment facilitator details provided by the merchant.
+	PaymentFacilitator *PaymentFacilitator `json:"paymentFacilitator,omitempty"`
+
+	// Split-shipment related information, in order to reuse the same authorization.
+	SplitShipment *SplitShipment `json:"splitShipment,omitempty"`
+
+	// Various wallet payment methods the gateway supports. Abstract class, do not use this class directly, use one of its children: EncryptedApplePayWalletPaymentMethod, EncryptedGooglePayWalletPaymentMethod, EncryptedSamsungPayWalletPaymentMethod, DecryptedApplePayWalletPaymentMethod, DecryptedGooglePayWalletPaymentMethod, DecryptedSamsungPayWalletPaymentMethod, MasterpassWalletPaymentMethod
+	WalletPaymentMethod WalletPaymentMethod `json:"walletPaymentMethod"`
+}
+
+// WalletSaleTransaction defines model for WalletSaleTransaction.
+type WalletSaleTransaction struct {
+	// Embedded struct due to allOf(#/components/schemas/PrimaryTransaction)
+	PrimaryTransaction
+	// Embedded fields due to inline allOf schema
+
+	// Payment facilitator details provided by the merchant.
+	PaymentFacilitator *PaymentFacilitator `json:"paymentFacilitator,omitempty"`
+
+	// Various wallet payment methods the gateway supports. Abstract class, do not use this class directly, use one of its children: EncryptedApplePayWalletPaymentMethod, EncryptedGooglePayWalletPaymentMethod, EncryptedSamsungPayWalletPaymentMethod, DecryptedApplePayWalletPaymentMethod, DecryptedGooglePayWalletPaymentMethod, DecryptedSamsungPayWalletPaymentMethod, MasterpassWalletPaymentMethod
+	WalletPaymentMethod WalletPaymentMethod `json:"walletPaymentMethod"`
+}
+
 // AccessTokenParam defines model for AccessTokenParam.
 type AccessTokenParam string
 
@@ -2381,6 +4559,15 @@ type ApiKeyParam string
 // ClientRequestIdParam defines model for ClientRequestIdParam.
 type ClientRequestIdParam string
 
+// ConnectModeQueryParam defines model for ConnectModeQueryParam.
+type ConnectModeQueryParam string
+
+// List of ConnectModeQueryParam
+const (
+	ConnectModeQueryParam_Classic  ConnectModeQueryParam = "Classic"
+	ConnectModeQueryParam_Combined ConnectModeQueryParam = "Combined"
+)
+
 // ContentTypeParam defines model for ContentTypeParam.
 type ContentTypeParam string
 
@@ -2389,14 +4576,23 @@ const (
 	ContentTypeParam_application_json ContentTypeParam = "application/json"
 )
 
+// DomainQueryParam defines model for DomainQueryParam.
+type DomainQueryParam string
+
 // FromDateQueryParam defines model for FromDateQueryParam.
 type FromDateQueryParam string
+
+// IpAddressQueryParam defines model for IpAddressQueryParam.
+type IpAddressQueryParam string
 
 // MerchantTransactionIdQueryParam defines model for MerchantTransactionIdQueryParam.
 type MerchantTransactionIdQueryParam string
 
 // MessageSignatureParam defines model for MessageSignatureParam.
 type MessageSignatureParam string
+
+// NameQueryParam defines model for NameQueryParam.
+type NameQueryParam string
 
 // OrderIdParam defines model for OrderIdParam.
 type OrderIdParam string
@@ -2416,6 +4612,12 @@ type StatusQueryParam string
 // StoreIdParam defines model for StoreIdParam.
 type StoreIdParam string
 
+// StoreIdPathParam defines model for StoreIdPathParam.
+type StoreIdPathParam string
+
+// TerminalIdQueryParam defines model for TerminalIdQueryParam.
+type TerminalIdQueryParam string
+
 // TimestampParam defines model for TimestampParam.
 type TimestampParam int64
 
@@ -2424,6 +4626,12 @@ type ToDateQueryParam string
 
 // TokenIdParam defines model for TokenIdParam.
 type TokenIdParam string
+
+// TokenIdentifierQueryParam defines model for TokenIdentifierQueryParam.
+type TokenIdentifierQueryParam string
+
+// TraceNumberQueryParam defines model for TraceNumberQueryParam.
+type TraceNumberQueryParam int32
 
 // TransactionIdParam defines model for TransactionIdParam.
 type TransactionIdParam string
@@ -2472,6 +4680,9 @@ type Unauthorized ErrorResponse
 
 // UnsupportedMediaType defines model for UnsupportedMediaType.
 type UnsupportedMediaType ErrorResponse
+
+// AuthenticationVerificationRequestRequestBody defines model for AuthenticationVerificationRequestRequestBody.
+type AuthenticationVerificationRequestRequestBody AuthenticationUpdateRequest
 
 // PaymentSchedulesRequestRequestBody defines model for PaymentSchedulesRequestRequestBody.
 type PaymentSchedulesRequestRequestBody PaymentSchedulesRequest
